@@ -14,4 +14,6 @@ Pasos:
 4. Agrupa los cambios en un commit con mensaje descriptivo del conjunto
    (sinergia por archivos tocados; ver regla 05).
 5. `git push` al remote. Si no hay remote configurado, avisa: sin push no hay backup.
-6. Resume en una línea: qué se hizo, qué quedó abierto, qué mirar al volver.
+6. Actualiza `docs/STATE.md` (capa de memoria portable, regla 05): estado actual ·
+   siguiente acción · decisiones abiertas. Corto. Inclúyelo en el commit.
+7. Resume en una línea: qué se hizo, qué quedó abierto, qué mirar al volver.

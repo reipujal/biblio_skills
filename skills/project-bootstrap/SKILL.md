@@ -25,6 +25,7 @@ del arranque.
    ├── .env.example         # plantilla sin valores reales
    ├── requirements.txt     # versiones fijadas
    ├── requirements.lock    # reproducibilidad estricta (opcional pero recomendado)
+   ├── docs/STATE.md        # memoria portable: estado · siguiente acción · decisiones
    ├── src/  (o main.py)
    └── tests/
    ```
@@ -38,7 +39,10 @@ del arranque.
    secretos, encoding.
 
 4. **Reproducibilidad** → `requirements.txt` con versiones fijadas (regla `04`); genera
-   `requirements.lock` para clavar el árbol completo.
+   `requirements.lock` para clavar el árbol completo, y declara los comandos de
+   restauración del entorno en la sección "Comandos" del `AGENTS.md` del proyecto
+   (clonar → venv → instalar lock → `.env`). Objetivo: montar el proyecto en otro PC
+   de forma determinista.
 
 5. **Seguridad de arranque** → `.gitignore` excluye `.env`, outputs, logs, caches
    (`templates/gitignore.txt`). `.env.example` con las variables sin valores.

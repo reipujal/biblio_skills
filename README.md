@@ -42,7 +42,8 @@ biblio_skills/
 │   ├── skill-development-framework/   # meta-skill: cómo crear skills
 │   ├── project-bootstrap/             # arrancar un proyecto nuevo bien
 │   ├── backend-automation/            # scripts de automatización con TASK.md
-│   └── multi-agent-collaboration/     # director / ejecutor / auditor independiente
+│   ├── multi-agent-collaboration/     # director / ejecutor / auditor independiente
+│   └── audit-board/                   # auditoría adversarial multi-rol en paralelo
 ├── workflows/                 # /cierre, /nueva-skill, /auditoria-externa
 └── ci-templates/              # pre-commit + GitHub Actions reutilizables
 ```
@@ -70,6 +71,33 @@ cd biblio_skills
 
 Las `ci-templates/` **no** se instalan globalmente: se copian por proyecto
 (ver `ci-templates/README.md`).
+
+## Arquitectura global de Antigravity (dónde vive cada cosa)
+
+Antigravity guarda lo global en tu máquina bajo `~/.gemini/`:
+
+| Activo                 | Ruta global                                      |
+| ---------------------- | ------------------------------------------------ |
+| Skills                 | `~/.gemini/config/skills/`                       |
+| Reglas personales      | `~/.gemini/GEMINI.md`                            |
+| Workflows              | `~/.gemini/antigravity/global_workflows/`        |
+| Memoria de sesión (CLI)| `~/.gemini/antigravity-cli/brain/`               |
+| Config MCP             | `~/.gemini/antigravity/mcp_config.json`          |
+
+`biblio_skills/rules/` es la **única fuente de verdad**; `install.sh` escribe un
+bloque gestionado en el/los fichero(s) global(es) que uses (`GLOBAL_RULE_TARGETS`).
+Un `CLAUDE.md` global (de Claude Code) **no lo lee Antigravity**: si lo conservas,
+hazlo que apunte a `biblio_skills/rules/` para que no diverja, o redúcelo. No mantengas
+reglas duplicadas en dos ficheros globales distintos.
+
+## Memoria del proyecto (dos capas, sin duplicar)
+
+- **Knowledge Items (KIs)** — mecanismo nativo de Antigravity: un subagente extrae al
+  cerrar cada conversación los hechos clave y los carga al inicio de la siguiente.
+  Automático, local a la máquina. No inventes un `memory.md` para esto.
+- **`docs/STATE.md`** — capa portable y versionada (estado · siguiente acción ·
+  decisiones), actualizada en `/cierre`. Es lo que sobrevive a un cambio de PC y lo que
+  un auditor externo lee desde GitHub. Mínimo, no un "memory bank" de cinco ficheros.
 
 ## Cómo se trabaja (reparto de modelos)
 

@@ -20,3 +20,16 @@ corrección bloqueante para una fase prevalezca.
 huérfanos en directorios críticos, verificación de integridad de ficheros de
 producción si hay checksums, y un briefing de reanudación (estado actual · qué hacer
 primero · qué monitorizar · comandos de diagnóstico).
+
+**Memoria del proyecto — dos capas, sin duplicar:**
+
+1. *Automática y local (Antigravity):* los **Knowledge Items** son el mecanismo nativo.
+   Un subagente de conocimiento extrae al cerrar cada conversación los hechos clave y los
+   carga al inicio de la siguiente. No requiere mantenimiento manual; **no inventes un
+   `memory.md` para esto** — sería redundante. Limitación: son locales a la máquina y a
+   Antigravity, no van en git.
+2. *Portable y auditable (git):* un único `docs/STATE.md` corto, versionado, que se
+   actualiza en `/cierre`: estado actual · siguiente acción · decisiones abiertas. Es lo
+   que sobrevive a un cambio de PC, lo que un auditor externo (Gemini/GPT) lee desde
+   GitHub, y lo que no depende de Antigravity. Mantenerlo mínimo — no un "memory bank" de
+   cinco ficheros (saturación).

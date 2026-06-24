@@ -51,11 +51,11 @@ juicio va en una regla o skill.** No mandes a un LLM a hacer el trabajo de un li
 
 ## Compuerta de promoción (industrialización)
 
-Nada entra como activo global hasta haberse **usado y validado 3 veces** en
+Nada entra como activo global hasta haberse **usado y validado 2–3 veces** en
 proyectos reales. La compuerta es lo que evita fabricar abstracciones especulativas.
 
 ```
-descubrimiento → validación (3 usos) → extracción → promoción aquí → install → reutilización
+descubrimiento → validación (2-3 usos) → extracción → promoción aquí → install → reutilización
 ```
 
 ## Definition of Done
