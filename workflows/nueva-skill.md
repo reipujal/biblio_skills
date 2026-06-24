@@ -17,4 +17,5 @@ Pasos:
    Referencia las `rules/` comunes en vez de copiarlas.
 6. Valida contra un caso de uso real.
 7. Pasa el `CHECKLIST.md`. Registra decisiones relevantes en `DECISIONS.md`.
-8. Cierra con `/cierre`.
+8. Regenera el catálogo: `python scripts/build_index.py` (para que `skill-finder` la encuentre).
+9. Cierra con `/cierre`.

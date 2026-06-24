@@ -16,6 +16,7 @@ tiene un enforcement automático asociado.
 | `04-dependencies.md`        | versiones fijadas; requirements al día [CI]                 |
 | `05-git-and-session.md`     | commit + push al cerrar; protocolo de pausa larga           |
 | `06-reasoning-discipline.md`| hipótesis antes de experimento; síntoma vs. causa; cierres  |
+| `07-skill-discovery.md`     | consultar el catálogo de skills antes de improvisar         |
 
 Excepción transversal a todas: sesiones de solo lectura, exploración o cambios
 exclusivos de documentación quedan exentas de los gates de cierre.

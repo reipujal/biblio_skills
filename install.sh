@@ -13,7 +13,7 @@ DRY_RUN=0
 [[ "${1:-}" == "--dry-run" ]] && DRY_RUN=1
 
 REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SKILLS_DST="${HOME}/.gemini/config/skills"
+SKILLS_DST="${HOME}/.gemini/antigravity/skills"   # confirmado empíricamente (ping-test)
 WORKFLOWS_DST="${HOME}/.gemini/antigravity/global_workflows"
 
 # Ficheros globales donde se escribe el bloque de reglas gestionado.

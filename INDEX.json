@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "note": "Catálogo de la biblioteca. Generado por scripts/build_index.py — no editar a mano.",
+  "count": 6,
+  "skills": [
+    {
+      "name": "audit-board",
+      "description": "Adversarial multi-role audit of any production or research system. Dispatches N parallel agents (each covering a role cluster) then a synthesis agent. Use when a project has real risk (production code, capital, users, data integrity) and needs rigorous external-style review. Trigger: /audit-board",
+      "path": "skills/audit-board"
+    },
+    {
+      "name": "backend-automation",
+      "description": "Crea y ejecuta scripts de automatización backend de calidad de producción (scraping, outreach, ETL, enriquecimiento de datos, tareas programadas) con documentación TASK.md y un índice maestro. Úsala SIEMPRE que el usuario pida \"automatiza\", \"script para\", \"scrapea\", \"envía emails\", \"procesa este CSV\", \"tarea recurrente\", o ejecutar/crear una automatización. Antes de escribir un script nuevo, comprueba si ya existe uno que lo haga.",
+      "path": "skills/backend-automation"
+    },
+    {
+      "name": "multi-agent-collaboration",
+      "description": "Protocolo para coordinar varios modelos LLM sobre un mismo proyecto con roles separados (director / ejecutor / auditor independiente). Úsala cuando un proyecto use más de un modelo —p.ej. un modelo que dirige y genera prompts, otro que ejecuta, y un tercero que audita—, cuando se hable de \"segunda opinión\", \"auditoría cruzada\", \"revisión por otro modelo\", \"handoff entre modelos\", o se diseñe gobierno de colaboración entre IAs. NO la apliques en proyectos mono-agente.",
+      "path": "skills/multi-agent-collaboration"
+    },
+    {
+      "name": "project-bootstrap",
+      "description": "Arranca un proyecto nuevo asistido por IA con la estructura, gobierno y barreras correctas desde el primer commit. Úsala SIEMPRE que el usuario empiece un proyecto desde cero, cree un repositorio nuevo, diga \"nuevo proyecto\", \"arrancar\", \"scaffolding\", \"montar el repo\", o pida estructura inicial / AGENTS.md / .gitignore / setup de tests o CI. Incluso si solo menciona \"voy a empezar algo nuevo\", ofrécela.",
+      "path": "skills/project-bootstrap"
+    },
+    {
+      "name": "skill-development-framework",
+      "description": "Metodología canónica para crear, revisar y evolucionar skills de agentes LLM en biblio_skills. Úsala SIEMPRE que el usuario quiera crear una skill nueva, decidir si algo merece ser una skill, estructurar o refactorizar una skill existente, o revisar la calidad de una skill — aunque no diga explícitamente \"skill\". Si detectas un patrón de trabajo reutilizable que podría industrializarse, consulta esta skill antes de proponer estructura.",
+      "path": "skills/skill-development-framework"
+    },
+    {
+      "name": "skill-finder",
+      "description": "Router y catálogo de la biblioteca central de skills (biblio_skills). Úsalo al inicio de CUALQUIER tarea sustantiva para comprobar si ya existe una skill reutilizable antes de improvisar, especialmente si ninguna otra skill se ha activado. También cuando el usuario diga \"¿hay una skill para esto?\", \"busca una skill\", \"instala la skill X\", o cuando detectes un patrón de trabajo recurrente que podría convertirse en skill. Imprescindible cuando la biblioteca tiene más skills de las que el usuario puede recordar — el usuario NO recuerda qué skills existen; ese recuerdo es tu trabajo.",
+      "path": "skills/skill-finder"
+    }
+  ]
+}

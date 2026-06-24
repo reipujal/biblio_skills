@@ -37,16 +37,20 @@ biblio_skills/
 ├── AGENTS.md                  # gobierno del repo (Antigravity lo lee nativo)
 ├── README.md                  # este fichero
 ├── install.sh                 # enlaza activos a las rutas globales de Antigravity
+├── INDEX.json                 # catálogo de skills (autogenerado; lo consulta skill-finder)
 ├── setup/                     # toolchain global de máquina (una vez por PC)
 │   ├── bootstrap-machine.sh   # Python fijado + CLIs (uv tool) + check de poppler
 │   └── python-stack.txt       # plantilla requirements.in para project-bootstrap
+├── scripts/
+│   └── build_index.py         # regenera INDEX.json escaneando skills/
 ├── rules/                     # reglas universales (siempre activas)
 ├── skills/
 │   ├── skill-development-framework/   # meta-skill: cómo crear skills
 │   ├── project-bootstrap/             # arrancar un proyecto nuevo bien
 │   ├── backend-automation/            # scripts de automatización con TASK.md
 │   ├── multi-agent-collaboration/     # director / ejecutor / auditor independiente
-│   └── audit-board/                   # auditoría adversarial multi-rol en paralelo
+│   ├── audit-board/                   # auditoría adversarial multi-rol en paralelo
+│   └── skill-finder/                  # router: busca en el catálogo, instala o propone crear
 ├── workflows/                 # /cierre, /nueva-skill, /auditoria-externa
 └── ci-templates/              # pre-commit + GitHub Actions reutilizables
 ```
@@ -60,7 +64,10 @@ ubicación que Antigravity consume:
 git clone https://github.com/reipujal/biblio_skills.git
 cd biblio_skills
 ./setup/bootstrap-machine.sh   # una vez por PC: Python, CLIs globales, check de poppler
-./install.sh                   # --dry-run para ver qué haría sin tocar nada
+# Windows nativo (junctions; Antigravity las ve como carpetas):
+#   pwsh -File install.ps1            (-DryRun para simular)
+# WSL / Linux (symlinks):
+#   ./install.sh                      (--dry-run para simular)
 ```
 
 | Origen              | Destino global de Antigravity                         |
@@ -82,11 +89,11 @@ Antigravity guarda lo global en tu máquina bajo `~/.gemini/`:
 
 | Activo                 | Ruta global                                      |
 | ---------------------- | ------------------------------------------------ |
-| Skills                 | `~/.gemini/config/skills/`                       |
+| Skills globales        | `~/.gemini/antigravity/skills/` (confirmado)     |
+| Skills de proyecto     | `<repo>/.agents/skills/` (gana prioridad sobre la global) |
 | Reglas personales      | `~/.gemini/GEMINI.md`                            |
-| Workflows              | `~/.gemini/antigravity/global_workflows/`        |
-| Memoria de sesión (CLI)| `~/.gemini/antigravity-cli/brain/`               |
-| Config MCP             | `~/.gemini/antigravity/mcp_config.json`          |
+| Memoria (KIs)          | `~/.gemini/antigravity/knowledge/`               |
+| MCP                    | `~/.gemini/antigravity/mcp_config.json`          |
 
 `biblio_skills/rules/` es la **única fuente de verdad**; `install.sh` escribe un
 bloque gestionado en el/los fichero(s) global(es) que uses (`GLOBAL_RULE_TARGETS`).
