@@ -51,8 +51,10 @@ biblio_skills/
 │   ├── multi-agent-collaboration/     # director / ejecutor / auditor independiente
 │   ├── audit-board/                   # auditoría adversarial multi-rol en paralelo
 │   └── skill-finder/                  # router: busca en el catálogo, instala o propone crear
-├── workflows/                 # /cierre, /nueva-skill, /auditoria-externa
-└── ci-templates/              # pre-commit + GitHub Actions reutilizables
+├── workflows/                 # cierre.md (workspace-only; ver docs/ANTIGRAVITY.md)
+├── ci-templates/              # pre-commit + GitHub Actions reutilizables
+└── docs/
+    └── ANTIGRAVITY.md         # mecánica verificada: rutas, junctions, qué es global
 ```
 
 ## Instalación (global)

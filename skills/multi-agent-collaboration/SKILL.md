@@ -54,6 +54,21 @@ Declara por proyecto qué ficheros son críticos y quién puede modificarlos. Pa
   autorizados y protegidos · tests esperados · output requerido · criterio de cierre.
 - **Done**: output binario verificado + revisión del director + documentación al día.
 
+## Procedimiento de auditoría externa (segunda opinión independiente)
+
+Reservado a decisiones irreversibles o de governance; en rutina basta director + ejecutor + CI.
+
+1. Confirma que la decisión justifica independencia fuerte (auditor de familia distinta:
+   Gemini/GPT). Si es rutina, no la uses.
+2. Define UNA sola pregunta binaria o claim a verificar, con criterio de aceptación
+   (binario o cuantitativo, con referencia externa cuando aplique).
+3. Reúne el contexto mínimo (ficheros concretos, no "todo el repo"). Si el proyecto es
+   público en GitHub, basta el enlace; si no, exporta los ficheros.
+4. El auditor entrega un report con: hallazgo + archivo:línea + severidad + razonamiento.
+   Prohibido que proponga implementaciones o specs: identifica, no decide.
+5. El director evalúa y decide: incorporar, abrir corrección o descartar (con
+   justificación). El auditor no modifica ficheros del proyecto.
+
 ## Implementación en Antigravity vs. herramientas separadas
 
 - **En Antigravity** (un solo harness, varios modelos): la coordinación es nativa.

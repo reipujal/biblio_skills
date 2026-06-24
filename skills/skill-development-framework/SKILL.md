@@ -61,7 +61,24 @@ incremental · validada por uso real.
 8. Registra las decisiones importantes en `DECISIONS.md`.
 
 Para revisar antes de dar por hecha una skill: ver `CHECKLIST.md`.
-Para arrancar una skill nueva con el esqueleto correcto: usar el workflow `/nueva-skill`.
+
+## Procedimiento operativo (crear una skill nueva)
+
+Sigue esto cada vez que algo merezca ser skill (industrializa "se crea siempre igual"):
+
+1. Comprueba la justificación: ¿las cuatro condiciones? ¿pasó la compuerta de promoción
+   (validada 2-3 veces)? Si no, extiende una skill existente o usa documentación de
+   proyecto, y para.
+2. Comprueba que no existe ya una skill que lo cubra (consulta `INDEX.json` / `skill-finder`;
+   reutilizar antes de crear).
+3. Crea `skills/<nombre-kebab-case>/` y copia el esqueleto de `TEMPLATE.md`. Solo los
+   ficheros necesarios.
+4. Redacta el `description` con QUÉ + CUÁNDO y tono insistente. Referencia las `rules/`
+   comunes en vez de copiarlas.
+5. Valida contra un caso de uso real.
+6. Pasa el `CHECKLIST.md`. Registra decisiones en `DECISIONS.md`.
+7. Regenera el catálogo: `python scripts/build_index.py` (para que `skill-finder` la encuentre).
+8. Cierra la sesión (commit + push + STATE).
 
 ## Anti-patrones
 

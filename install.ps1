@@ -11,7 +11,7 @@ Uso:
   pwsh -File install.ps1            # instala
   pwsh -File install.ps1 -DryRun    # muestra qué haría, sin tocar nada
 #>
-param([switch]$DryRun)
+param([switch]$DryRun, [string]$Project)
 
 $ErrorActionPreference = "Stop"
 
@@ -84,5 +84,25 @@ if ($DryRun) {
 
 Write-Host "`nHecho."
 Write-Host "Verifica en Antigravity (cierra y reabre): /skills debe listar las de biblio_skills,"
+
+# 3) Workflows -> SOLO por proyecto (no hay global). Requiere -Project <ruta_repo>.
+if ($Project) {
+  $wfSrc = Join-Path $Repo "workflows"
+  $wfDst = Join-Path $Project ".agents\workflows"
+  Write-Host "`n3) Workflows -> $wfDst (workspace; no hay ruta global)"
+  Act "mkdir $wfDst" { New-Item -ItemType Directory -Force -Path $wfDst | Out-Null }
+  Get-ChildItem -File (Join-Path $wfSrc "*.md") | ForEach-Object {
+    $dst = Join-Path $wfDst $_.Name
+    if (Test-Path $dst) { Act "elimina $($_.Name) previo" { Remove-Item -Force $dst } }
+    # Hard link (ficheros, mismo volumen, sin admin). Si fallara (otro volumen), copia.
+    Act "hardlink workflow $($_.Name)" {
+      try   { New-Item -ItemType HardLink -Path $dst -Target $_.FullName | Out-Null }
+      catch { Copy-Item -Path $_.FullName -Destination $dst -Force }
+    }
+  }
+} else {
+  Write-Host "`n3) Workflows: omitidos (pasa -Project <ruta_repo> para instalar /cierre en .agents\workflows de ese repo)."
+}
+
 Write-Host "y una regla del bloque debe respetarse. Edita en biblio_skills y reejecuta para propagar."
 Write-Host "Skills de proyecto: van en <repo>\.agents\skills\ (ganan prioridad sobre la global)."
