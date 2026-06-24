@@ -1,0 +1,27 @@
+# python-stack.txt — plantilla de stack Python habitual (= requirements.in).
+#
+# project-bootstrap copia esto a cada repo nuevo como `requirements.in`.
+# Flujo por proyecto (con uv):
+#   1. poda lo que no uses, descomenta lo que sí
+#   2. uv venv                                  # crea .venv con el Python fijado
+#   3. uv pip compile requirements.in -o requirements.lock   # clava el árbol completo
+#   4. uv pip sync requirements.lock            # instala exactamente el lock
+#
+# Mantén versiones FLEXIBLES aquí; deja que el compile las clave en requirements.lock.
+# El lock es lo reproducible y va en git; este fichero es solo la semilla.
+
+# --- núcleo ---
+pyyaml             # parsing YAML (frontmatter, config)
+python-dotenv      # carga de .env — secretos fuera del código (regla 01)
+requests           # HTTP
+
+# --- testing (como librería; los CLIs de calidad son globales: ruff, pre-commit) ---
+pytest
+
+# --- datos (descomenta lo que aplique) ---
+# pandas
+# numpy
+
+# --- LLM / APIs (descomenta lo que aplique) ---
+# anthropic
+# openai

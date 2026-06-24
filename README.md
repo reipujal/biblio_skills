@@ -37,6 +37,9 @@ biblio_skills/
 ├── AGENTS.md                  # gobierno del repo (Antigravity lo lee nativo)
 ├── README.md                  # este fichero
 ├── install.sh                 # enlaza activos a las rutas globales de Antigravity
+├── setup/                     # toolchain global de máquina (una vez por PC)
+│   ├── bootstrap-machine.sh   # Python fijado + CLIs (uv tool) + check de poppler
+│   └── python-stack.txt       # plantilla requirements.in para project-bootstrap
 ├── rules/                     # reglas universales (siempre activas)
 ├── skills/
 │   ├── skill-development-framework/   # meta-skill: cómo crear skills
@@ -56,7 +59,8 @@ ubicación que Antigravity consume:
 ```bash
 git clone https://github.com/reipujal/biblio_skills.git
 cd biblio_skills
-./install.sh            # --dry-run para ver qué haría sin tocar nada
+./setup/bootstrap-machine.sh   # una vez por PC: Python, CLIs globales, check de poppler
+./install.sh                   # --dry-run para ver qué haría sin tocar nada
 ```
 
 | Origen              | Destino global de Antigravity                         |

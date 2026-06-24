@@ -38,11 +38,13 @@ del arranque.
    Actions). Ver `ci-templates/README.md`. Esto enforca lo determinista: tests verdes,
    secretos, encoding.
 
-4. **Reproducibilidad** → `requirements.txt` con versiones fijadas (regla `04`); genera
-   `requirements.lock` para clavar el árbol completo, y declara los comandos de
-   restauración del entorno en la sección "Comandos" del `AGENTS.md` del proyecto
-   (clonar → venv → instalar lock → `.env`). Objetivo: montar el proyecto en otro PC
-   de forma determinista.
+4. **Reproducibilidad (con `uv`)** → copia `setup/python-stack.txt` como `requirements.in`,
+   poda/descomenta, y genera el lock dentro del repo:
+   `uv venv` · `uv pip compile requirements.in -o requirements.lock` · `uv pip sync
+   requirements.lock`. El `requirements.lock` (árbol completo clavado) va en git; es lo
+   reproducible. Declara los comandos de restauración en la sección "Comandos" del
+   `AGENTS.md`. El **toolchain global** (Python fijado, pre-commit, ruff, poppler) NO va
+   por proyecto: lo instala una vez `setup/bootstrap-machine.sh`.
 
 5. **Seguridad de arranque** → `.gitignore` excluye `.env`, outputs, logs, caches
    (`templates/gitignore.txt`). `.env.example` con las variables sin valores.
