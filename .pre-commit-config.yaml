@@ -1,0 +1,21 @@
+# Pre-commit del PROPIO biblio_skills: valida sus invariantes deterministas.
+# Instalar: uv tool install pre-commit && pre-commit install
+repos:
+  - repo: local
+    hooks:
+      - id: build-index-check
+        name: INDEX.json al día y skills bien formadas
+        entry: python scripts/build_index.py --check
+        language: system
+        pass_filenames: false
+        always_run: true
+      - id: check-encoding
+        name: codificación UTF-8 sin mojibake
+        entry: python ci-templates/check_encoding.py
+        language: system
+        types: [text]
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
+    hooks:
+      - id: ruff
+        files: ^scripts/

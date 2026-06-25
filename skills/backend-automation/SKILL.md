@@ -1,5 +1,6 @@
 ---
 name: backend-automation
+maturity: experimental
 description: Crea y ejecuta scripts de automatización backend de calidad de producción (scraping, outreach, ETL, enriquecimiento de datos, tareas programadas) con documentación TASK.md y un índice maestro. Úsala SIEMPRE que el usuario pida "automatiza", "script para", "scrapea", "envía emails", "procesa este CSV", "tarea recurrente", o ejecutar/crear una automatización. Antes de escribir un script nuevo, comprueba si ya existe uno que lo haga.
 ---
 

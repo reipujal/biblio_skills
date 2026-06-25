@@ -1,5 +1,6 @@
 ---
 name: multi-agent-collaboration
+maturity: validated
 description: Protocolo para coordinar varios modelos LLM sobre un mismo proyecto con roles separados (director / ejecutor / auditor independiente). Úsala cuando un proyecto use más de un modelo —p.ej. un modelo que dirige y genera prompts, otro que ejecuta, y un tercero que audita—, cuando se hable de "segunda opinión", "auditoría cruzada", "revisión por otro modelo", "handoff entre modelos", o se diseñe gobierno de colaboración entre IAs. NO la apliques en proyectos mono-agente.
 ---
 

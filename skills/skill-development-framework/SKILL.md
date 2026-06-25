@@ -1,5 +1,6 @@
 ---
 name: skill-development-framework
+maturity: beta
 description: Metodología canónica para crear, revisar y evolucionar skills de agentes LLM en biblio_skills. Úsala SIEMPRE que el usuario quiera crear una skill nueva, decidir si algo merece ser una skill, estructurar o refactorizar una skill existente, o revisar la calidad de una skill — aunque no diga explícitamente "skill". Si detectas un patrón de trabajo reutilizable que podría industrializarse, consulta esta skill antes de proponer estructura.
 ---
 

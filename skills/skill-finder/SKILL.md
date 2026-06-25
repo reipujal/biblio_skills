@@ -1,6 +1,7 @@
 ---
 name: skill-finder
-description: Router y catálogo de la biblioteca central de skills (biblio_skills). Úsalo al inicio de CUALQUIER tarea sustantiva para comprobar si ya existe una skill reutilizable antes de improvisar, especialmente si ninguna otra skill se ha activado. También cuando el usuario diga "¿hay una skill para esto?", "busca una skill", "instala la skill X", o cuando detectes un patrón de trabajo recurrente que podría convertirse en skill. Imprescindible cuando la biblioteca tiene más skills de las que el usuario puede recordar — el usuario NO recuerda qué skills existen; ese recuerdo es tu trabajo.
+maturity: experimental
+description: Router y catálogo de la biblioteca central de skills (biblio_skills). Úsalo cuando ninguna otra skill se haya activado para una tarea y esta sea especializada, cuando el usuario diga "¿hay una skill para esto?", "busca/instala una skill", o cuando detectes un patrón de trabajo recurrente que podría convertirse en skill. NO actúes como segundo router en peticiones triviales o cuando ya hay una skill de dominio activa — eso duplica el routing nativo. Su valor es encontrar skills NO instaladas que el usuario no recuerda.
 ---
 
 # Skill Finder — router de la biblioteca

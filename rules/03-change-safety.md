@@ -19,3 +19,9 @@ analiza la causa raíz. Un parche que oculta el problema es peor que no hacer na
 lee el código y verifica que es correcta. La documentación es una hipótesis hasta
 que se verifica; el hallazgo real es el código. Al detectar divergencia, corrige el
 documento o el código según cuál sea incorrecto — ignorar la discrepancia no es opción.
+
+**Excepción: documentos normativos.** Si el documento es *normativo* (un contrato, una
+especificación, una política o una constitución que dicta lo que el código DEBE hacer), la
+divergencia es una presunción de que el **código** está mal, no el documento. No "ajustes"
+el contrato para que cuadre con el código sin autorización explícita: verifica cuál refleja
+la intención y corrige el código si es él quien se desvía.

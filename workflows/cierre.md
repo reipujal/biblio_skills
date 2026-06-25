@@ -10,10 +10,12 @@ Pasos:
 2. Ejecuta la suite de tests (`pytest` o equivalente). Si hay rojos:
    - si es deuda preexistente ajena al cambio, documéntalo explícitamente y continúa;
    - si lo introdujo esta sesión, NO cierres: arréglalo primero.
-3. `git status` — revisa qué cambió.
-4. Agrupa los cambios en un commit con mensaje descriptivo del conjunto
-   (sinergia por archivos tocados; ver regla 05).
-5. `git push` al remote. Si no hay remote configurado, avisa: sin push no hay backup.
-6. Actualiza `docs/STATE.md` (capa de memoria portable, regla 05): estado actual ·
-   siguiente acción · decisiones abiertas. Corto. Inclúyelo en el commit.
+3. `git status` — revisa qué cambió. Comprueba que no se cuelan secretos (claves, `.env`).
+4. Actualiza `docs/STATE.md` (capa de memoria portable, regla 05): estado actual ·
+   siguiente acción · decisiones abiertas. Corto. (Se actualiza ANTES del commit para que
+   entre en él.)
+5. Agrupa los cambios en un commit por **unidad lógica** (coherente, verificable,
+   revertible — los archivos tocados son indicador secundario; ver regla 05). Incluye
+   `docs/STATE.md` en el commit.
+6. `git push` al remote. Si no hay remote configurado, avisa: sin push no hay backup.
 7. Resume en una línea: qué se hizo, qué quedó abierto, qué mirar al volver.

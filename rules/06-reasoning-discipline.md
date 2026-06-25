@@ -5,6 +5,12 @@ exploratorio, define: (1) una pregunta binaria, (2) criterio de éxito, (3) crit
 falsificación. Si no puedes definir la falsificación, no es un experimento, es pesca:
 no se ejecuta.
 
+*Matiz:* esto aplica al experimento **confirmatorio**. La **exploración/caracterización
+inicial** (entender datos o un sistema desconocido) es una fase previa legítima que NO
+requiere hipótesis binaria — su salida ES la hipótesis. Distíngue las fases: explorar →
+formular hipótesis → experimentar → validar. No exijas falsación a una exploración, ni te
+saltes la hipótesis al pasar a confirmar.
+
 **Síntoma vs. causa estructural.** Si un sistema falla repetidamente pese a correcciones
 sucesivas, para antes de seguir parcheando. Señales de causa estructural: (a) las mejores
 correcciones están al límite de lo que el sistema puede hacer; (b) hay un cambio de

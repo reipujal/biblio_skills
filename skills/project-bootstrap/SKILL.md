@@ -1,5 +1,6 @@
 ---
 name: project-bootstrap
+maturity: beta
 description: Arranca un proyecto nuevo asistido por IA con la estructura, gobierno y barreras correctas desde el primer commit. Úsala SIEMPRE que el usuario empiece un proyecto desde cero, cree un repositorio nuevo, diga "nuevo proyecto", "arrancar", "scaffolding", "montar el repo", o pida estructura inicial / AGENTS.md / .gitignore / setup de tests o CI. Incluso si solo menciona "voy a empezar algo nuevo", ofrécela.
 ---
 

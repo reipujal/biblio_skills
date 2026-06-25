@@ -1,5 +1,6 @@
 ---
 name: audit-board
+maturity: validated
 description: "Adversarial multi-role audit of any production or research system. Dispatches N parallel agents (each covering a role cluster) then a synthesis agent. Use when a project has real risk (production code, capital, users, data integrity) and needs rigorous external-style review. Trigger: /audit-board"
 trigger: /audit-board
 ---
