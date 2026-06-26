@@ -81,6 +81,20 @@ Sigue esto cada vez que algo merezca ser skill (industrializa "se crea siempre i
 7. Regenera el catálogo: `python scripts/build_index.py` (para que `skill-finder` la encuentre).
 8. Cierra la sesión (commit + push + STATE).
 
+## Skill vs. workflow (no confundir el activo)
+
+Una **skill** se activa por *match de `description`* (bajo demanda). Un **workflow** se
+invoca *explícitamente con `/nombre`* y vive solo en `<repo>/.agents/workflows/` (no hay
+ruta global en Antigravity). Si dudas: ¿el agente debe *decidir* cuándo usarlo? → skill. ¿El
+usuario lo *invoca* a mano? → workflow.
+
+> **Requisito de registro de un workflow:** el `.md` DEBE empezar con frontmatter YAML
+> `--- / description: ... / ---`. Sin ese bloque, Antigravity NO lo registra como slash
+> command (aunque el fichero exista en `.agents/workflows/`). Una "Descripción:" en prosa
+> en el cuerpo no cuenta. Verifica las 3 primeras líneas tras crearlo. Tras instalar/editar,
+> reinicia Antigravity (indexa al arrancar) — y si el destino es un hard link, rehazlo, no
+> basta sobrescribir el origen.
+
 ## Anti-patrones
 
 Un único Markdown gigante · framework antes que evidencia · explosión de carpetas ·

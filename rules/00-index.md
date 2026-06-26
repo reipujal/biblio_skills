@@ -15,8 +15,9 @@ tiene un enforcement automático asociado.
 | `03-change-safety.md`       | verificar callers; cambio quirúrgico; código sobre docs     |
 | `04-dependencies.md`        | versiones fijadas; requirements al día [CI]                 |
 | `05-git-and-session.md`     | commit + push al cerrar; protocolo de pausa larga           |
-| `06-reasoning-discipline.md`| hipótesis antes de experimento; síntoma vs. causa; cierres  |
+| `06-reasoning-discipline.md`| exploración vs. confirmación; hechos vs. hipótesis; síntoma vs. causa; cierre razonado |
 | `07-skill-discovery.md`     | consultar el catálogo de skills antes de improvisar         |
+| `08-minimal-design-build-vs-buy.md` | empezar por lo mínimo; reutilizar antes de construir; riesgos explícitos |
 
 Excepción transversal a todas: sesiones de solo lectura, exploración o cambios
 exclusivos de documentación quedan exentas de los gates de cierre.

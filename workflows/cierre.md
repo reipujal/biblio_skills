@@ -1,7 +1,7 @@
+---
+description: Cierra una sesión de trabajo sincronizando el estado con el remote y dejando la suite en verde. Invocar con /cierre cuando hubo cambios de código en disco.
+---
 # Cierre de sesión
-
-Descripción: cierra una sesión de trabajo sincronizando el estado con el remote y
-dejando la suite en verde. Invocar con `/cierre`.
 
 Pasos:
 
