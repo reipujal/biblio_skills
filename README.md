@@ -58,6 +58,26 @@ biblio_skills/
     └── ANTIGRAVITY.md         # mecánica verificada de Antigravity
 ```
 
+## Por Dónde Empezar
+
+| Situación | Lee |
+| --- | --- |
+| Instalar un PC desde cero | [`docs/guides/bootstrap-windows.md`](docs/guides/bootstrap-windows.md) |
+| El bootstrap falló y quieres ayuda de un LLM | [`docs/guides/bootstrap-debug-llm.md`](docs/guides/bootstrap-debug-llm.md) |
+| Entender qué es cada pieza del repo | [`docs/guides/repository-map.md`](docs/guides/repository-map.md) |
+| Saber cómo Antigravity carga rules, skills y workflows | [`docs/ANTIGRAVITY.md`](docs/ANTIGRAVITY.md) |
+| Diseñar o revisar una skill | [`skills/skill-development-framework/`](skills/skill-development-framework/) |
+| Aplicar checks automáticos a un proyecto | [`ci-templates/README.md`](ci-templates/README.md) |
+
+Camino feliz de instalación:
+
+```text
+instalar Antigravity -> descargar biblio_skills -> ejecutar bootstrap-machine -> trabajar por chat
+```
+
+El detalle paso a paso está en la guía de instalación. El README no intenta
+repetirlo para no crear dos fuentes de verdad.
+
 ## Activos Principales
 
 Las reglas universales están indexadas en `rules/00-index.md`. Son pocas a
@@ -84,72 +104,27 @@ python scripts/build_index.py
 python scripts/build_index.py --check
 ```
 
-## Primera Instalación De Máquina
+## Bootstrap E Instalación
 
-La secuencia esperada es:
+`setup/bootstrap-machine.ps1` y `setup/bootstrap-machine.sh` son el botón de
+máquina nueva. Preparan el toolchain global y después conectan `biblio_skills`
+con Antigravity.
 
-```text
-instalar Antigravity -> clonar/descargar biblio_skills -> ejecutar bootstrap-machine -> vivir en chat
-```
+Resumen de lo que dejan preparado:
 
-`setup/bootstrap-machine.*` es el botón único de máquina nueva: verifica/instala
-el toolchain global, comprueba GitHub CLI, prepara Python, instala CLIs globales
-y CLIs LLM auxiliares, verifica Poppler y después conecta `biblio_skills` con
-Antigravity llamando a `install.*`.
-Si Git aún no está disponible, el repo puede descargarse como ZIP; el bootstrap
-dejará Git y GitHub CLI instalados para el trabajo posterior.
+- Git y GitHub CLI.
+- `uv`, Python gestionado por `uv`, `pre-commit`, `detect-secrets` y `ruff`.
+- Node.js/npm y CLIs LLM auxiliares: `codex`, `claude`, `gemini`.
+- Poppler para trabajo con PDFs.
+- Rules y skills visibles para el agente nativo de Antigravity.
 
-Windows:
+`install.ps1` e `install.sh` son solo la conexión/refresco de la biblioteca: enlazan
+skills, propagan rules y pueden instalar workflows por proyecto. Para una máquina
+nueva, usa el bootstrap; para refrescar una instalación existente, usa `install.*`.
 
-```powershell
-pwsh -File setup\bootstrap-machine.ps1
-```
-
-WSL/Linux:
-
-```bash
-./setup/bootstrap-machine.sh
-```
-
-Qué deja preparado:
-
-| Capa | Resultado |
-| --- | --- |
-| Sistema | Git, GitHub CLI, `uv`, Node.js/npm, Poppler |
-| Python global | Python gestionado por `uv` |
-| CLIs globales aisladas | `pre-commit`, `detect-secrets`, `ruff` |
-| CLIs LLM auxiliares | `codex`, `claude`, `gemini` |
-| Antigravity | skills y rules de `biblio_skills` visibles para el agente nativo |
-| Proyecto opcional | workflows con `-Project <repo>` o `--project <repo>` |
-
-## Refrescar La Biblioteca
-
-El repositorio es la fuente de verdad. La conexión no crea copias manuales de los
-activos reutilizables; los enlaza o escribe bloques gestionados. Si la máquina ya
-está preparada y solo quieres refrescar rules/skills:
-
-```powershell
-pwsh -File install.ps1
-```
-
-```bash
-./install.sh
-```
-
-Qué conecta:
-
-| Origen | Destino |
-| --- | --- |
-| `skills/<x>/` | `~/.gemini/antigravity/skills/<x>/` |
-| `rules/*.md` | bloque gestionado en `~/.gemini/GEMINI.md` |
-| `workflows/*.md` | solo por proyecto, con `-Project <repo>` o `--project <repo>` |
-
-Las plantillas de `ci-templates/` no se instalan globalmente. Se copian y ajustan
-en cada proyecto porque dependen de su suite, paths y gestor de paquetes.
-
-La mecánica exacta de Antigravity, incluyendo rutas, prioridad entre global y
-proyecto, junctions de Windows y límites de workflows globales, vive en
-`docs/ANTIGRAVITY.md`.
+Los workflows, incluido `/cierre`, no son globales en Antigravity: se instalan en
+cada proyecto. La explicación completa vive en
+[`docs/guides/repository-map.md`](docs/guides/repository-map.md).
 
 ## Reglas De Evolución
 
