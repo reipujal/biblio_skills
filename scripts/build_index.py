@@ -9,6 +9,7 @@ El catálogo lo consulta skill-finder; no debe aceptar definiciones incompletas 
 Sin dependencias externas: parser mínimo del frontmatter YAML.
 """
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -16,6 +17,8 @@ REPO = Path(__file__).resolve().parent.parent
 SKILLS = REPO / "skills"
 OUT = REPO / "INDEX.json"
 VALID_MATURITY = {"experimental", "beta", "validated"}
+NAME_RE = re.compile(r"^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$")
+MAX_DESCRIPTION_LEN = 1024
 
 
 def parse_frontmatter(md_path: Path) -> dict:
@@ -56,10 +59,20 @@ def collect():
         if not name:
             problems.append(f"{skill_dir.name}: falta 'name' en frontmatter")
             name = skill_dir.name
+        elif not NAME_RE.fullmatch(name) or "--" in name:
+            problems.append(
+                f"{skill_dir.name}: 'name' debe ser kebab-case Agent Skills "
+                "(1-64 chars, a-z, 0-9, guiones simples)"
+            )
         if name != skill_dir.name:
             problems.append(f"{skill_dir.name}: 'name' ({name}) != nombre de carpeta")
         if not desc:
             problems.append(f"{skill_dir.name}: falta 'description'")
+        elif len(desc) > MAX_DESCRIPTION_LEN:
+            problems.append(
+                f"{skill_dir.name}: 'description' supera {MAX_DESCRIPTION_LEN} caracteres "
+                f"({len(desc)})"
+            )
         if mat and mat not in VALID_MATURITY:
             problems.append(f"{skill_dir.name}: maturity '{mat}' no válida {sorted(VALID_MATURITY)}")
         if name in seen:

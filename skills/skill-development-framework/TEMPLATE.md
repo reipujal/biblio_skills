@@ -9,7 +9,8 @@ skills/<nombre-kebab-case>/
 ├── TEMPLATE.md         (si produce artefactos reutilizables)
 ├── CHECKLIST.md        (si tiene gates de calidad propios)
 ├── DECISIONS.md        (si hay decisiones arquitectónicas que registrar)
-└── templates/          (ficheros de salida: .gitignore, .env.example, etc.)
+├── templates/          (ficheros de salida: .gitignore, .env.example, etc.)
+└── scripts/            (scripts reutilizables, solo si aportan valor real)
 ```
 
 ## SKILL.md base
@@ -46,3 +47,14 @@ description: <QUÉ hace> + <CUÁNDO usarse: contextos y frases concretas>. Tono
 | Fichero de entrada  | siempre      | `SKILL.md`                       |
 
 No nombres el fichero de entrada según la skill. Siempre es `SKILL.md`.
+
+## Convenciones de compatibilidad
+
+- El `name` debe coincidir con la carpeta y usar kebab-case compatible con Agent Skills:
+  `a-z`, `0-9`, guiones simples, máximo 64 caracteres.
+- El `description` debe mantenerse por debajo de 1024 caracteres.
+- Referencia recursos con rutas relativas desde la raíz de la skill.
+- Si un script se reutiliza entre ejecuciones, ponlo en `scripts/`, evita prompts
+  interactivos y documenta su uso con `--help` o desde `SKILL.md`.
+- Mantén plantillas y assets grandes fuera de `SKILL.md`; el agente debe cargarlos solo
+  cuando hagan falta.
