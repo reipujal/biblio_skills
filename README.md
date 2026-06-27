@@ -74,8 +74,8 @@ cd biblio_skills
 
 | Origen              | Destino global de Antigravity                         |
 | ------------------- | ----------------------------------------------------- |
-| `skills/<x>/`       | `~/.gemini/config/skills/<x>/` (symlink)              |
-| `workflows/<x>.md`  | `~/.gemini/antigravity/global_workflows/<x>.md`       |
+| `skills/<x>/`       | `~/.gemini/antigravity/skills/<x>/` (junction en Windows / symlink en WSL) |
+| `workflows/<x>.md`  | `<repo>/.agents/workflows/<x>.md` (SOLO por proyecto; NO hay ruta global — usa `-Project`) |
 | `rules/`            | referenciadas/concatenadas en `~/.gemini/GEMINI.md`   |
 
 > Verifica las rutas exactas en tu versión de Antigravity antes de confiar en el
@@ -107,10 +107,12 @@ reglas duplicadas en dos ficheros globales distintos.
 
 - **Knowledge Items (KIs)** — mecanismo nativo de Antigravity: un subagente extrae al
   cerrar cada conversación los hechos clave y los carga al inicio de la siguiente.
-  Automático, local a la máquina. No inventes un `memory.md` para esto.
-- **`docs/STATE.md`** — capa portable y versionada (estado · siguiente acción ·
-  decisiones), actualizada en `/cierre`. Es lo que sobrevive a un cambio de PC y lo que
-  un auditor externo lee desde GitHub. Mínimo, no un "memory bank" de cinco ficheros.
+  Automático, local a la máquina, **no va en git y no lo lee Claude Code**.
+- **`docs/memory/`** — capa portable y versionada que cualquier harness lee vía `@import`.
+  La estructura la define la skill **`memory-keeper`** (índice `MEMORY.md` autogenerado +
+  ficheros tipados; el estado vive en `docs/memory/project-state.md`, que actualiza
+  `/cierre`). Es la fuente única de memoria portable; no crees ficheros de memoria ad-hoc
+  fuera de ese sistema.
 
 ## Cómo se trabaja (reparto de modelos)
 

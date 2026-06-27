@@ -43,9 +43,16 @@ Get-ChildItem -Directory $SkillsSrc | ForEach-Object {
   $dst  = Join-Path $SkillsDst $name
   $src  = $_.FullName
   if (Test-Path $dst) {
-    Act "elimina junction/carpeta previa $name" {
-      # Remove-Item sobre una junction borra el enlace, no el contenido origen
-      (Get-Item $dst).Delete()
+    $item = Get-Item $dst -Force
+    $isReparse = $item.Attributes -band [IO.FileAttributes]::ReparsePoint
+    if ($isReparse) {
+      Act "elimina junction previa $name" {
+        # es un reparse point (junction): borrar el enlace no toca el contenido origen
+        $item.Delete()
+      }
+    } else {
+      Write-Host "  X ABORTA: '$dst' existe y NO es una junction (carpeta/archivo real) -- no lo toco. Resuelvelo a mano." -ForegroundColor Red
+      return
     }
   }
   Act "junction $name -> $src" {

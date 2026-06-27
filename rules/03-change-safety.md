@@ -11,6 +11,12 @@
 El cambio debe ser **quirúrgico** (mínima superficie). No refactorices módulos
 completos sin requerimiento explícito.
 
+**Al introducir o renombrar un concepto, ruta o convención**, busca en el repo las
+referencias al anterior (`grep`) y actualízalas en la **misma pasada**. Incluye la
+documentación normativa (README, reglas, AGENTS.md): una convención nueva que convive con la
+vieja en otro fichero es una contradicción, no una mejora. Termina con un `grep` del término
+viejo para confirmar que no quedan referencias sueltas.
+
 **Diagnostica antes de parchear.** Si se reporta un error, no apliques un fix rápido:
 analiza la causa raíz. Un parche que oculta el problema es peor que no hacer nada.
 

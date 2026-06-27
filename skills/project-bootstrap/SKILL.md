@@ -24,9 +24,9 @@ del arranque.
    ├── README.md
    ├── .gitignore
    ├── .env.example         # plantilla sin valores reales
-   ├── requirements.txt     # versiones fijadas
-   ├── requirements.lock    # reproducibilidad estricta (opcional pero recomendado)
-   ├── docs/STATE.md        # memoria portable: estado · siguiente acción · decisiones
+   ├── requirements.in      # dependencias directas (rangos/mínimos)
+   ├── requirements.lock    # árbol completo clavado (en git) — reproducibilidad
+   ├── docs/memory/         # memoria portable (skill memory-keeper): MEMORY.md + project-state.md
    ├── src/  (o main.py)
    └── tests/
    ```

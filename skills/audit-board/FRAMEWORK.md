@@ -9,7 +9,10 @@
 
 ### Fase 1 — Agentes paralelos
 
-Lanzar SIMULTÁNEAMENTE en el mismo mensaje de Claude (una llamada al Agent tool por cluster).
+Lanzar SIMULTÁNEAMENTE en un solo turno los subagentes (uno por cluster), usando el mecanismo
+de subagentes/paralelización del harness en uso (p. ej. el Agent tool en Claude Code, o los
+subagentes nativos de Antigravity). El framework es harness-neutral; las particularidades de
+plataforma van en la nota de plataforma de la skill, no aquí.
 El número de clusters, sus nombres, sus roles asignados y sus context bundles están en el profile.
 
 **Prompt estándar para cada agente de Fase 1** (sustituir variables del profile):
