@@ -12,6 +12,14 @@ los tres modelos leen los mismos ficheros del IDE. `CLAUDE.md` es de Claude Code
 no lo lee**. Por eso el gobierno por proyecto va en `AGENTS.md` (que Antigravity sí lee) y, si
 acaso, importa `CLAUDE.md` con `@import`.
 
+> **Trampa de panel (causa de confusión real, dos veces).** En la ventana conviven DOS agentes:
+> el panel **Claude Code** (slash commands propios: `/context`, `/compact`, `/usage`…; lee
+> `~/.claude/skills/`) y el panel **agente nativo (Gemini)** a la derecha (campo "Ask anything,
+> / for workflows"; lee `~/.gemini/antigravity/skills/` y `<repo>/.agents/workflows/`). Las
+> skills y workflows de biblio_skills SOLO aparecen en el panel Gemini. Si pruebas `/cierre` o
+> `/skills` en el panel Claude Code, NO saldrán — no es un bug, es el panel equivocado. **Verifica
+> siempre en el panel del agente Gemini.**
+
 Hay **dos sistemas de skills conviviendo** en la máquina, según el harness:
 - Panel **Claude Code** dentro de Antigravity → lee `~/.claude/skills/`.
 - Agente **Antigravity nativo** (Gemini) → lee `~/.gemini/antigravity/skills/`.
@@ -28,6 +36,11 @@ nativas. Para ver las nativas, preguntar al agente Gemini "qué skills tienes di
 
 Memoria nativa (Knowledge Items): `~/.gemini/antigravity/knowledge/` (automática, local).
 MCP: `~/.gemini/antigravity/mcp_config.json`.
+
+Workflows: Antigravity escanea 4 variantes de carpeta — `.agents/workflows`, `.agent/workflows`,
+`_agents/workflows`, `_agent/workflows` (usamos la primera). El `.md` DEBE empezar con frontmatter
+`--- / description: ... / ---` o no se registra como slash command (una "Descripción:" en prosa no
+cuenta).
 
 ## Implicaciones de diseño
 

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "note": "Catálogo de la biblioteca. Generado por scripts/build_index.py — no editar a mano.",
-  "count": 6,
+  "count": 7,
   "skills": [
     {
       "name": "audit-board",
@@ -14,6 +14,12 @@
       "description": "Crea y ejecuta scripts de automatización backend de calidad de producción (scraping, outreach, ETL, enriquecimiento de datos, tareas programadas) con documentación TASK.md y un índice maestro. Úsala SIEMPRE que el usuario pida \"automatiza\", \"script para\", \"scrapea\", \"envía emails\", \"procesa este CSV\", \"tarea recurrente\", o ejecutar/crear una automatización. Antes de escribir un script nuevo, comprueba si ya existe uno que lo haga.",
       "maturity": "experimental",
       "path": "skills/backend-automation"
+    },
+    {
+      "name": "memory-keeper",
+      "description": "Memoria persistente y portable del proyecto (markdown en git, leída por cualquier harness vía @import). Úsala cuando el usuario diga \"guarda en memoria\", \"recuerda esto\", \"anota esto\" o pida explícitamente persistir algo; cuando el usuario te corrija un comportamiento (\"no hagas X\") o confirme un enfoque no obvio; o antes de un /compact o cierre de sesión si hay algo aprendido sin guardar. Destila con juicio QUÉ merece recordarse (no vuelca todo). El usuario decide; tú propones y, con su OK, escribes.",
+      "maturity": "experimental",
+      "path": "skills/memory-keeper"
     },
     {
       "name": "multi-agent-collaboration",
