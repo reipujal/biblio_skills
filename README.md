@@ -1,139 +1,147 @@
 # biblio_skills
 
-Biblioteca central y reutilizable de activos para agentes LLM, diseñada para
-**Google Antigravity** y pensada para funcionar de forma global en todos los
-proyectos. Su objetivo: dejar de re-derivar las mismas buenas prácticas en cada
-repo y convertirlas en barreras que previenen errores automáticamente.
+`biblio_skills` es la biblioteca central de activos reutilizables para agentes
+LLM: reglas universales, skills, workflows, plantillas de CI y piezas mínimas de
+bootstrap.
 
-## Modelo conceptual
+Su función no es guardar prompts. Su función es evitar que cada proyecto vuelva a
+inventar, copiar y degradar las mismas prácticas operativas. Lo que vive aquí se
+consume por referencia, se instala mediante enlaces o bloques gestionados, y se
+mantiene como una única fuente de verdad.
 
-Cuatro tipos de activo, cada uno con un criterio de activación distinto:
+## Qué Es
 
-- **`rules/`** — Reglas que valen **siempre**, en cualquier proyecto. El agente
-  las tiene de fondo sin que se las repitas (secretos, tests, seguridad de cambios…).
-  Son las normas pegadas en la pared.
-- **`skills/`** — Paquetes de conocimiento que se cargan **bajo demanda**, solo
-  cuando la petición coincide con su `description` (progressive disclosure). Son
-  las recetas que el agente saca del cajón cuando va a hacer ese plato.
-- **`workflows/`** — Secuencias invocables con `/nombre` (slash command).
-- **`ci-templates/`** — Barreras **duras**: lo que una máquina puede comprobar
-  (tests verdes, secretos, encoding) se enforca en CI/hooks, no se le pide al LLM
-  que lo recuerde.
+Este repositorio separa cuatro tipos de conocimiento que suelen mezclarse:
 
-Regla de oro: **prosa para el juicio, automatización para lo determinista.**
+| Activo | Cuándo se activa | Dónde vive | Propósito |
+| --- | --- | --- | --- |
+| Regla | Siempre | `rules/` | Criterios universales de trabajo: seguridad, tests, cambio mínimo, dependencias, cierre. |
+| Skill | Cuando la petición encaja con su `description` | `skills/` | Procedimientos reutilizables para familias concretas de tareas. |
+| Workflow | Cuando el usuario invoca `/nombre` | `workflows/` | Rutinas explícitas de sesión o proyecto. |
+| Plantilla CI | En hooks, commits o PRs | `ci-templates/` | Gates deterministas que una máquina puede comprobar. |
 
-## Por qué existe
+La regla de diseño es simple: **el juicio va en reglas o skills; lo comprobable va
+en CI o scripts**.
 
-El problema real no era falta de buenas prácticas, sino que vivían dispersas y
-duplicadas (un `CLAUDE.md` global por aquí, un `rules/` por proyecto por allá,
-con nombres distintos y deriva entre copias). `biblio_skills` es la **única fuente
-de verdad**: cada proyecto la consume por referencia; si mejoras una regla, todos
-los proyectos la heredan.
+## Qué No Es
 
-## Mapa del almacén
+- No es un repositorio de prompts largos.
+- No es un cementerio de ideas futuras.
+- No es una jerarquía de skills base y skills hijas.
+- No es el lugar para conocimiento específico de un proyecto.
+- No es un sustituto de linters, tests, hooks o CI.
 
+Una práctica solo debería promocionarse aquí cuando ya fue usada y validada en
+proyectos reales. La ruta esperada es:
+
+```text
+descubrimiento -> validación (2-3 usos) -> extracción -> promoción -> instalación -> reutilización
 ```
+
+## Mapa Del Repositorio
+
+```text
 biblio_skills/
-├── AGENTS.md                  # gobierno del repo (Antigravity lo lee nativo)
-├── README.md                  # este fichero
-├── install.sh                 # enlaza activos a las rutas globales de Antigravity
-├── INDEX.json                 # catálogo de skills (autogenerado; lo consulta skill-finder)
-├── setup/                     # toolchain global de máquina (una vez por PC)
-│   ├── bootstrap-machine.sh   # Python fijado + CLIs (uv tool) + check de poppler
-│   └── python-stack.txt       # plantilla requirements.in para project-bootstrap
-├── scripts/
-│   └── build_index.py         # regenera INDEX.json escaneando skills/
-├── rules/                     # reglas universales (siempre activas)
-├── skills/
-│   ├── skill-development-framework/   # meta-skill: cómo crear skills
-│   ├── project-bootstrap/             # arrancar un proyecto nuevo bien
-│   ├── backend-automation/            # scripts de automatización con TASK.md
-│   ├── multi-agent-collaboration/     # director / ejecutor / auditor independiente
-│   ├── audit-board/                   # auditoría adversarial multi-rol en paralelo
-│   └── skill-finder/                  # router: busca en el catálogo, instala o propone crear
-├── workflows/                 # cierre.md (workspace-only; ver docs/ANTIGRAVITY.md)
-├── ci-templates/              # pre-commit + GitHub Actions reutilizables
+├── AGENTS.md                  # gobierno del repo: rol del agente, principios y DoD
+├── README.md                  # puerta de entrada conceptual
+├── INDEX.json                 # catálogo autogenerado de skills
+├── install.ps1                # instalación Windows: junctions y bloque de rules
+├── install.sh                 # instalación WSL/Linux: symlinks y bloque de rules
+├── rules/                     # reglas universales, siempre activas
+├── skills/                    # skills reutilizables, cargadas bajo demanda
+├── workflows/                 # workflows invocables; Antigravity no los carga globalmente
+├── ci-templates/              # pre-commit, CI y checks copiables por proyecto
+├── setup/                     # bootstrap global de máquina y plantilla de stack Python
+├── scripts/                   # mantenimiento del repo, como build_index.py
 └── docs/
-    └── ANTIGRAVITY.md         # mecánica verificada: rutas, junctions, qué es global
+    └── ANTIGRAVITY.md         # mecánica verificada de Antigravity
 ```
 
-## Instalación (global)
+## Activos Principales
 
-`biblio_skills` es la fuente de verdad; `install.sh` enlaza cada activo a la
-ubicación que Antigravity consume:
+Las reglas universales están indexadas en `rules/00-index.md`. Son pocas a
+propósito: si todo es una regla crítica, nada lo es. Cubren secretos, tests,
+seguridad del cambio, dependencias, git/cierre, disciplina de razonamiento,
+descubrimiento de skills y diseño mínimo.
+
+Las skills disponibles están catalogadas en `INDEX.json`, generado desde el
+frontmatter de cada `skills/<nombre>/SKILL.md`. Hoy el catálogo incluye:
+
+- `audit-board`
+- `backend-automation`
+- `memory-keeper`
+- `multi-agent-collaboration`
+- `project-bootstrap`
+- `skill-development-framework`
+- `skill-finder`
+
+Si añades o cambias una skill, regenera el catálogo:
 
 ```bash
-git clone https://github.com/reipujal/biblio_skills.git
-cd biblio_skills
-./setup/bootstrap-machine.sh   # una vez por PC: Python, CLIs globales, check de poppler
-# Windows nativo (junctions; Antigravity las ve como carpetas):
-#   pwsh -File install.ps1            (-DryRun para simular)
-# WSL / Linux (symlinks):
-#   ./install.sh                      (--dry-run para simular)
+python scripts/build_index.py
+python scripts/build_index.py --check
 ```
 
-| Origen              | Destino global de Antigravity                         |
-| ------------------- | ----------------------------------------------------- |
-| `skills/<x>/`       | `~/.gemini/antigravity/skills/<x>/` (junction en Windows / symlink en WSL) |
-| `workflows/<x>.md`  | `<repo>/.agents/workflows/<x>.md` (SOLO por proyecto; NO hay ruta global — usa `-Project`) |
-| `rules/`            | referenciadas/concatenadas en `~/.gemini/GEMINI.md`   |
+## Instalación
 
-> Verifica las rutas exactas en tu versión de Antigravity antes de confiar en el
-> symlink de rules; si el `@import` absoluto no resuelve desde el `GEMINI.md`
-> global, `install.sh` concatena en su lugar (ver el script).
+El repositorio es la fuente de verdad. La instalación no debería crear copias
+manuales de los activos reutilizables; debería enlazarlos o escribir bloques
+gestionados.
 
-Las `ci-templates/` **no** se instalan globalmente: se copian por proyecto
-(ver `ci-templates/README.md`).
+Windows:
 
-## Arquitectura global de Antigravity (dónde vive cada cosa)
+```powershell
+pwsh -File install.ps1 -DryRun
+pwsh -File install.ps1
+```
 
-Antigravity guarda lo global en tu máquina bajo `~/.gemini/`:
+WSL/Linux:
 
-| Activo                 | Ruta global                                      |
-| ---------------------- | ------------------------------------------------ |
-| Skills globales        | `~/.gemini/antigravity/skills/` (confirmado)     |
-| Skills de proyecto     | `<repo>/.agents/skills/` (gana prioridad sobre la global) |
-| Reglas personales      | `~/.gemini/GEMINI.md`                            |
-| Memoria (KIs)          | `~/.gemini/antigravity/knowledge/`               |
-| MCP                    | `~/.gemini/antigravity/mcp_config.json`          |
+```bash
+./install.sh --dry-run
+./install.sh
+```
 
-`biblio_skills/rules/` es la **única fuente de verdad**; `install.sh` escribe un
-bloque gestionado en el/los fichero(s) global(es) que uses (`GLOBAL_RULE_TARGETS`).
-Un `CLAUDE.md` global (de Claude Code) **no lo lee Antigravity**: si lo conservas,
-hazlo que apunte a `biblio_skills/rules/` para que no diverja, o redúcelo. No mantengas
-reglas duplicadas en dos ficheros globales distintos.
+Qué instala:
 
-## Memoria del proyecto (dos capas, sin duplicar)
+| Origen | Destino |
+| --- | --- |
+| `skills/<x>/` | `~/.gemini/antigravity/skills/<x>/` |
+| `rules/*.md` | bloque gestionado en `~/.gemini/GEMINI.md` |
+| `workflows/*.md` | solo por proyecto, con `-Project <repo>` o `--project <repo>` |
 
-- **Knowledge Items (KIs)** — mecanismo nativo de Antigravity: un subagente extrae al
-  cerrar cada conversación los hechos clave y los carga al inicio de la siguiente.
-  Automático, local a la máquina, **no va en git y no lo lee Claude Code**.
-- **`docs/memory/`** — capa portable y versionada que cualquier harness lee vía `@import`.
-  La estructura la define la skill **`memory-keeper`** (índice `MEMORY.md` autogenerado +
-  ficheros tipados; el estado vive en `docs/memory/project-state.md`, que actualiza
-  `/cierre`). Es la fuente única de memoria portable; no crees ficheros de memoria ad-hoc
-  fuera de ese sistema.
+Las plantillas de `ci-templates/` no se instalan globalmente. Se copian y ajustan
+en cada proyecto porque dependen de su suite, paths y gestor de paquetes.
 
-## Cómo se trabaja (reparto de modelos)
+La mecánica exacta de Antigravity, incluyendo rutas, prioridad entre global y
+proyecto, junctions de Windows y límites de workflows globales, vive en
+`docs/ANTIGRAVITY.md`.
 
-- **Dirección / estrategia** (genera prompts, revisa, decide): el modelo más fuerte
-  disponible (Opus).
-- **Ejecución** de specs claras: Sonnet.
-- **Codificación**: Codex / Sonnet.
-- **Auditoría independiente** en decisiones críticas: Gemini o GPT (familia distinta
-  = independencia real). Puntual, no en el loop diario.
+## Reglas De Evolución
 
-## Compuerta de promoción
+Antes de añadir algo:
 
-Un patrón no entra en la biblioteca al ocurrírsete. Primero se usa **2–3 veces** en
-proyectos reales; si funciona, se extrae, se generaliza (quitando lo específico) y
-se promociona aquí. Así el almacén no se llena de recetas no validadas.
+1. Comprueba si ya existe una regla, skill, workflow o plantilla que lo cubra.
+2. Reutiliza o modifica la fuente existente antes de crear otra.
+3. Si parece una skill nueva, aplica `skills/skill-development-framework/`.
+4. Si es determinista, conviértelo en check, hook o CI, no en recordatorio para el LLM.
+5. Si es específico de un proyecto, déjalo en ese proyecto.
 
-## Roadmap (aún NO creadas — se crean cuando un proyecto real las valide)
+Una contribución está cerrada solo cuando preserva la consistencia del repo,
+evita duplicación, mantiene la documentación afectada y no aumenta complejidad
+sin necesidad.
 
-- `skills/rag-engineering/` — chunking, evaluación de faithfulness, harness de jueces.
-- `skills/sap-functional/` — convenciones de provenance, T-codes, frontmatter SAP.
-- Más `ci-templates/` por clase de proyecto.
+## Lectura Adversativa
 
-No existen como carpetas vacías a propósito: crear estructura para un futuro
-hipotético es el anti-patrón que este repo evita.
+El riesgo principal de este repo es traicionar su propia misión: crecer por
+entusiasmo, duplicar criterio entre documentos o convertir conocimiento operativo
+en prosa que nadie ejecuta. Por eso el diseño favorece activos pequeños, planos,
+referenciables y con dueño claro.
+
+El README debe ser una brújula, no el manual completo. Las fuentes especializadas
+son:
+
+- Gobierno del repositorio: `AGENTS.md`
+- Diseño de skills: `skills/skill-development-framework/`
+- Mecánica de Antigravity: `docs/ANTIGRAVITY.md`
+- Barreras deterministas por proyecto: `ci-templates/README.md`

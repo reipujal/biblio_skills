@@ -1,7 +1,7 @@
 {
   "version": 1,
   "note": "Catálogo de la biblioteca. Generado por scripts/build_index.py — no editar a mano.",
-  "count": 7,
+  "count": 8,
   "skills": [
     {
       "name": "audit-board",
@@ -23,7 +23,7 @@
     },
     {
       "name": "multi-agent-collaboration",
-      "description": "Protocolo para coordinar varios modelos LLM sobre un mismo proyecto con roles separados (director / ejecutor / auditor independiente). Úsala cuando un proyecto use más de un modelo —p.ej. un modelo que dirige y genera prompts, otro que ejecuta, y un tercero que audita—, cuando se hable de \"segunda opinión\", \"auditoría cruzada\", \"revisión por otro modelo\", \"handoff entre modelos\", o se diseñe gobierno de colaboración entre IAs. NO la apliques en proyectos mono-agente.",
+      "description": "Protocolo para coordinar varios modelos LLM sobre un mismo proyecto con roles separados (director / ejecutor / auditor independiente). Úsala cuando un proyecto use más de un modelo —p.ej. Sonnet/Claude como director que escribe requisitos, Codex como ejecutor que codifica/tests, y Gemini/GPT como auditor—, cuando se hable de \"segunda opinión\", \"auditoría cruzada\", \"revisión por otro modelo\", \"handoff entre modelos\", \"Sonnet pide a Codex\", \"Codex implementa y reporta\", colas docs/tasks/codex, o gobierno de colaboración entre IAs. NO la apliques en proyectos mono-agente.",
       "maturity": "validated",
       "path": "skills/multi-agent-collaboration"
     },
@@ -32,6 +32,12 @@
       "description": "Arranca un proyecto nuevo asistido por IA con la estructura, gobierno y barreras correctas desde el primer commit. Úsala SIEMPRE que el usuario empiece un proyecto desde cero, cree un repositorio nuevo, diga \"nuevo proyecto\", \"arrancar\", \"scaffolding\", \"montar el repo\", o pida estructura inicial / AGENTS.md / .gitignore / setup de tests o CI. Incluso si solo menciona \"voy a empezar algo nuevo\", ofrécela.",
       "maturity": "beta",
       "path": "skills/project-bootstrap"
+    },
+    {
+      "name": "project-guardrails-audit",
+      "description": "Audita repositorios existentes contra el catálogo de `ci-templates/` para decidir qué guardrails automáticos aplicar, adaptar, mantener o descartar. Úsala cuando el usuario diga \"revisa qué ci-templates debería tener este proyecto\", \"audita las barreras del proyecto\", \"qué checks automáticos me faltan\", \"este proyecto ha crecido, revisa CI/pre-commit\", \"qué guardrails necesita este repo\", \"revisa la higiene de CI\", o \"autorevísate e identifica qué de ci-templates aplica\". Reporta también riesgos reales sin plantilla disponible en el catálogo.",
+      "maturity": "experimental",
+      "path": "skills/project-guardrails-audit"
     },
     {
       "name": "skill-development-framework",

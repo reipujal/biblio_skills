@@ -1,33 +1,53 @@
-# ci-templates — barreras duras por proyecto
+# ci-templates — Catálogo de Guardrails
 
-Estas plantillas enforcan lo **determinista** (lo que una máquina puede comprobar) y
-**no** se instalan globalmente: se copian a cada proyecto. La razón es que dependen del
-gestor de paquetes, los paths y la suite de cada repo.
+Este directorio no es un repositorio de "copia y pega todo". Es un **catálogo de guardrails automáticos identificados**, cada uno con una CONDICIÓN estricta de aplicación. Su objetivo es delimitar qué se controla y cuándo aplica.
 
-Reparto con las `rules/`: la regla define el *estándar y el criterio* (juicio); estas
-plantillas son el *gate que bloquea* (determinista). No mandes a un LLM a hacer el
-trabajo de un linter.
+Las plantillas aquí refuerzan lo determinista (lo que una máquina puede comprobar). Mientras que `rules/` define el estándar y el criterio de trabajo (ej. manejo de secretos, reproducibilidad; ver `../rules/04-dependencies.md`), las `ci-templates` son las barreras duras que bloquean el error.
 
-## Qué hay aquí
+## Niveles de Aplicación
 
-| Fichero                     | Enforca                                                  |
-| --------------------------- | -------------------------------------------------------- |
-| `pre-commit-config.yaml`    | secretos comiteados, encoding UTF-8, higiene básica      |
-| `github-actions-ci.yml`     | suite de tests verde como gate del PR                    |
-| `check_encoding.py`         | secuencias de mojibake (ej. `Ã±`) en ficheros de texto   |
+Existen dos niveles de guardrails:
 
-## Instalación en un proyecto
+1. **Baseline (siempre, en todo repo):** Se instalan sin preguntar porque son comprobaciones rápidas, baratas y universalmente útiles. Incluye:
+   - `pre-commit` con hooks oficiales (whitespace, fin de fichero, validación YAML/JSON, ficheros grandes, marcadores de merge).
+   - `detect-secrets` para prevenir el filtrado accidental de credenciales y tokens.
+   - `check_encoding.py` propio para detectar problemas de encoding (UTF-8, mojibake), especialmente relevante para flujos en español.
+
+2. **Condicional (solo si hay señal):** Se aplican *únicamente* cuando el proyecto presenta una señal detectable (ej. uso de Python, Node.js, presencia de tests).
+
+## Catálogo de Guardrails
+
+| Guardrail                     | Qué controla                              | Aplica si (señal)                                                             | Herramienta                                             | Estado en el catálogo                        |
+| :---------------------------- | :---------------------------------------- | :---------------------------------------------------------------------------- | :------------------------------------------------------ | :------------------------------------------- |
+| **pre-commit baseline**       | higiene + secretos + encoding             | siempre                                                                       | pre-commit-hooks + detect-secrets + check_encoding.py   | plantilla disponible                         |
+| **GitHub Actions CI**         | ejecuta tests/checks en push/PR           | hay remote en GitHub **y** existe un comando de tests/checks REAL que pueda pasar | GitHub Actions                                          | plantilla disponible                         |
+| **Lint/format Python**        | calidad y estilo de código Python         | hay `.py` / `pyproject.toml` / `requirements.in`                              | ruff                                                    | identificado (pendiente de hook pre-commit)  |
+| **Lock de dependencias Python** | control de versiones y reproducibilidad   | hay `requirements.in`                                                         | uv pip compile                                          | cubierto por la [regla 04](../rules/04-dependencies.md) |
+| **Lint/format web (JS/TS)**   | calidad y estilo de código JS/TS          | hay `package.json` o ficheros web                                             | prettier (+ eslint/biome si es Node)                    | identificado, sin plantilla aún              |
+| **Lock de dependencias JS**   | control de versiones y reproducibilidad   | hay `package.json`                                                            | lock del gestor (npm/pnpm)                              | identificado, sin plantilla aún              |
+
+*(Nota CI: un repositorio sin suite de pruebas, como `biblio_skills`, NO debe forzar una CI que asuma `pytest` por defecto, ya que quedaría roja siempre. El comando debe parametrizarse validando la realidad del proyecto, guiándose por el documento `AGENTS.md` de dicho repo).*
+
+## Cómo se usa el catálogo
+
+- La skill **`project-bootstrap`** copia e instala el baseline automáticamente al crear repositorios nuevos.
+- La skill **`project-guardrails-audit`** evalúa las condiciones en repositorios existentes y reporta qué falta. Esto incluye alertar sobre riesgos para los cuales el catálogo actual aún no tiene una plantilla disponible (los reporta como un hueco a cubrir).
+
+## Instalación Manual (Plantillas Disponibles)
+
+Si necesitas instalar manualmente los guardrails de los que SÍ disponemos plantilla actualmente, ejecuta lo siguiente:
 
 ```bash
-# desde la raíz del proyecto destino
+# Desde la raíz del proyecto destino:
 cp <biblio_skills>/ci-templates/pre-commit-config.yaml .pre-commit-config.yaml
 mkdir -p .github/workflows scripts
 cp <biblio_skills>/ci-templates/github-actions-ci.yml .github/workflows/ci.yml
 cp <biblio_skills>/ci-templates/check_encoding.py scripts/check_encoding.py
 
+# Instalación de pre-commit y secretos en Python:
 pip install pre-commit detect-secrets
 pre-commit install                      # activa el hook local
 detect-secrets scan > .secrets.baseline # baseline inicial de secretos
 ```
 
-Ajusta el comando de tests en `github-actions-ci.yml` al de tu proyecto.
+> **Aviso Importante:** Al copiar `github-actions-ci.yml`, debes **ajustar el comando de tests** al stack real del proyecto destino. Lee la sección de comandos del `AGENTS.md` de tu repositorio antes de configurar GitHub Actions; no hardcodees `pytest` si tu proyecto no cuenta con tests en ese framework.
