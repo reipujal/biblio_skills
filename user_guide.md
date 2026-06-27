@@ -46,6 +46,7 @@ Qué deja preparado:
 - `uv` disponible como gestor del toolchain Python.
 - Python gestionado por `uv`.
 - CLIs globales aisladas: `pre-commit`, `detect-secrets`, `ruff`.
+- CLIs LLM auxiliares: `codex`, `claude`, `gemini`.
 - Poppler disponible para trabajo con PDFs.
 - Rules y skills de `biblio_skills` conectadas con Antigravity.
 - Workflows instalables por proyecto cuando pases `-Project` / `--project`.

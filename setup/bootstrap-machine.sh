@@ -10,6 +10,7 @@ set -euo pipefail
 
 PYTHON_VERSION="3.14"          # uv resuelve al último patch (3.14.x)
 GLOBAL_TOOLS=(pre-commit detect-secrets ruff)
+NPM_TOOLS=("@openai/codex:codex" "@google/gemini-cli:gemini")
 PROJECT=""
 SKIP_INSTALL=0
 
@@ -27,13 +28,14 @@ echo "== biblio_skills :: bootstrap de máquina =="
 echo "repo: $REPO"
 
 # 1. Base del sistema.
-for t in git gh uv; do
+for t in git gh uv npm; do
   if ! command -v "$t" >/dev/null 2>&1; then
     echo "ERROR: falta $t."
     case "$t" in
       git) echo "  Instálalo con tu gestor del sistema (apt/brew/etc.)." ;;
       gh)  echo "  Instálalo: https://cli.github.com/" ;;
       uv)  echo "  Instálalo: https://docs.astral.sh/uv/getting-started/installation/" ;;
+      npm) echo "  Instala Node.js LTS con tu gestor del sistema." ;;
     esac
     exit 1
   fi
@@ -41,6 +43,7 @@ done
 echo "git: $(git --version)"
 echo "gh: $(gh --version | head -n 1)"
 echo "uv: $(uv --version)"
+echo "npm: $(npm --version)"
 
 if ! gh auth status >/dev/null 2>&1; then
   echo "ERROR: GitHub CLI no está autenticado."
@@ -66,7 +69,39 @@ for tool in "${GLOBAL_TOOLS[@]}"; do
 done
 echo "Herramientas globales instaladas: ${GLOBAL_TOOLS[*]}"
 
-# 5. Herramientas de SISTEMA que uv NO puede instalar — verificar, no instalar
+# 5. CLIs LLM.
+echo "== Instalando/verificando CLIs LLM =="
+for spec in "${NPM_TOOLS[@]}"; do
+  package="${spec%%:*}"
+  command_name="${spec##*:}"
+  if command -v "$command_name" >/dev/null 2>&1; then
+    echo "  OK: $command_name"
+  else
+    npm install -g "$package"
+  fi
+done
+
+if command -v claude >/dev/null 2>&1; then
+  echo "  OK: claude"
+else
+  if command -v curl >/dev/null 2>&1; then
+    curl -fsSL https://claude.ai/install.sh | bash
+  else
+    echo "ERROR: falta curl para instalar Claude Code."
+    exit 1
+  fi
+fi
+
+for t in codex gemini claude; do
+  if ! command -v "$t" >/dev/null 2>&1; then
+    echo "ERROR: $t se ha instalado o intentado instalar, pero no aparece en PATH."
+    echo "  Abre una terminal nueva y reejecuta el bootstrap."
+    exit 1
+  fi
+done
+echo "CLIs LLM listas: codex gemini claude"
+
+# 6. Herramientas de SISTEMA que uv NO puede instalar — verificar, no instalar
 echo "== Comprobando herramientas de sistema (poppler-utils) =="
 missing=()
 for t in pdfinfo pdftotext pdffonts pdftoppm; do
@@ -86,7 +121,7 @@ if (( ${#missing[@]} > 0 )); then
   exit 1
 fi
 
-# 6. Conectar biblio_skills con Antigravity.
+# 7. Conectar biblio_skills con Antigravity.
 if [[ "$SKIP_INSTALL" -eq 1 ]]; then
   echo "Instalación de biblio_skills omitida por --skip-install."
 else

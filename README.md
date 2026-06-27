@@ -92,8 +92,9 @@ instalar Antigravity -> clonar/descargar biblio_skills -> ejecutar bootstrap-mac
 ```
 
 `setup/bootstrap-machine.*` es el botón único de máquina nueva: verifica/instala
-el toolchain global, comprueba GitHub CLI, prepara Python y CLIs globales, verifica
-Poppler y después conecta `biblio_skills` con Antigravity llamando a `install.*`.
+el toolchain global, comprueba GitHub CLI, prepara Python, instala CLIs globales
+y CLIs LLM auxiliares, verifica Poppler y después conecta `biblio_skills` con
+Antigravity llamando a `install.*`.
 Si Git aún no está disponible, el repo puede descargarse como ZIP; el bootstrap
 dejará Git y GitHub CLI instalados para el trabajo posterior.
 
@@ -113,9 +114,10 @@ Qué deja preparado:
 
 | Capa | Resultado |
 | --- | --- |
-| Sistema | Git, GitHub CLI, `uv`, Poppler |
+| Sistema | Git, GitHub CLI, `uv`, Node.js/npm, Poppler |
 | Python global | Python gestionado por `uv` |
 | CLIs globales aisladas | `pre-commit`, `detect-secrets`, `ruff` |
+| CLIs LLM auxiliares | `codex`, `claude`, `gemini` |
 | Antigravity | skills y rules de `biblio_skills` visibles para el agente nativo |
 | Proyecto opcional | workflows con `-Project <repo>` o `--project <repo>` |
 

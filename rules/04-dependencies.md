@@ -13,13 +13,14 @@ un `requirements.txt` mantenido a mano.
 - Objetivo: que `uv pip sync requirements.lock` reconstruya el entorno exacto, sin dependencias
   fantasma ni drift de versiones.
 
-**Toolchain global (por máquina, NO por proyecto):** Git/GitHub CLI, versión de
-Python, CLIs de calidad (pre-commit, ruff, detect-secrets), herramientas de
-sistema (poppler) y conexión de `biblio_skills` con Antigravity. Se instala una
-vez con `setup/bootstrap-machine.ps1` en Windows o `setup/bootstrap-machine.sh`
-en Unix/WSL. Un `requirements.lock` global es un anti-patrón: rompe el
-aislamiento y provoca conflictos de versión entre proyectos. Los instalables
-no-pip se declaran en la sección "Comandos" del `AGENTS.md` del repo.
+**Toolchain global (por máquina, NO por proyecto):** Git/GitHub CLI, Node.js/npm,
+versión de Python, CLIs de calidad (pre-commit, ruff, detect-secrets), CLIs LLM
+auxiliares (codex, claude, gemini), herramientas de sistema (poppler) y conexión
+de `biblio_skills` con Antigravity. Se instala una vez con
+`setup/bootstrap-machine.ps1` en Windows o `setup/bootstrap-machine.sh` en
+Unix/WSL. Un `requirements.lock` global es un anti-patrón: rompe el aislamiento
+y provoca conflictos de versión entre proyectos. Los instalables no-pip se
+declaran en la sección "Comandos" del `AGENTS.md` del repo.
 
 [CI] La coherencia "lo importado está declarado / lo declarado está instalado" es
 comprobable y se enforca con checks de `ci-templates/`.

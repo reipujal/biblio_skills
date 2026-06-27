@@ -21,6 +21,10 @@ $ErrorActionPreference = "Stop"
 
 $PythonVersion = "3.14"
 $GlobalUvTools = @("pre-commit", "detect-secrets", "ruff")
+$GlobalNpmTools = @(
+  @{ Command = "codex"; Package = "@openai/codex"; Name = "Codex CLI" },
+  @{ Command = "gemini"; Package = "@google/gemini-cli"; Name = "Gemini CLI" }
+)
 $Repo = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 $InstallScript = Join-Path $Repo "install.ps1"
 
@@ -55,6 +59,7 @@ function Ensure-WingetPackage([string]$Command, [string]$Id, [string]$Name) {
     Write-Host "  OK ${Name}: $((Get-Command $Command).Source)"
   } else {
     Install-WingetPackage $Id $Name
+    if ($DryRun) { return }
     if (-not (Has-Command $Command)) {
       throw "$Name se instalo o intento instalarse, pero '$Command' no aparece en PATH. Abre una terminal nueva y reejecuta."
     }
@@ -64,6 +69,21 @@ function Ensure-WingetPackage([string]$Command, [string]$Id, [string]$Name) {
 function Ensure-UvTool([string]$Tool) {
   Step "uv tool install --upgrade $Tool" {
     uv tool install --upgrade $Tool
+  }
+}
+
+function Ensure-NpmTool([string]$Command, [string]$Package, [string]$Name) {
+  if (Has-Command $Command) {
+    Write-Host "  OK ${Name}: $((Get-Command $Command).Source)"
+  } else {
+    Require-Command "npm" "Instala Node.js/npm o deja que el bootstrap instale Node.js LTS antes de instalar $Name."
+    Step "npm install -g $Package" {
+      npm install -g $Package
+    }
+    if ($DryRun) { return }
+    if (-not (Has-Command $Command)) {
+      throw "$Name se instalo o intento instalarse, pero '$Command' no aparece en PATH. Abre una terminal nueva y reejecuta."
+    }
   }
 }
 
@@ -95,6 +115,7 @@ Write-Host "`n2) Base del sistema"
 Ensure-WingetPackage "git" "Git.Git" "Git"
 Ensure-WingetPackage "gh" "GitHub.cli" "GitHub CLI"
 Ensure-WingetPackage "uv" "astral-sh.uv" "uv"
+Ensure-WingetPackage "node" "OpenJS.NodeJS.LTS" "Node.js LTS"
 
 Write-Host "`n3) GitHub"
 if ($DryRun) {
@@ -124,16 +145,17 @@ foreach ($tool in $popplerTools) {
 }
 Write-Host "  OK Poppler: $($popplerTools -join ', ')"
 
-Write-Host "`n7) CLIs de agentes disponibles"
-$agentCommands = @("antigravity", "codex", "claude", "gemini")
-foreach ($command in $agentCommands) {
-  if (Has-Command $command) {
-    Write-Host "  OK ${command}: $((Get-Command $command).Source)"
-  } else {
-    Write-Host "  AVISO $command no esta en PATH"
-  }
+Write-Host "`n7) CLIs LLM"
+Ensure-WingetPackage "claude" "Anthropic.ClaudeCode" "Claude Code"
+foreach ($tool in $GlobalNpmTools) {
+  Ensure-NpmTool $tool.Command $tool.Package $tool.Name
 }
-Write-Host "  Nota: biblio_skills se instala para el agente nativo de Antigravity; codex/claude/gemini son CLIs auxiliares."
+if ($DryRun) {
+  Write-Host "  [dry-run] CLIs LLM verificadas o planificadas: codex, claude, gemini"
+} else {
+  Write-Host "  OK CLIs LLM: codex, claude, gemini"
+}
+Write-Host "  Nota: biblio_skills se instala para el agente nativo de Antigravity; estos CLIs son auxiliares."
 
 Write-Host "`n8) Conectar biblio_skills con Antigravity"
 if ($SkipInstall) {
