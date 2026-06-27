@@ -7,6 +7,13 @@ Derivado de la regla de encoding del protocolo de colaboracion.
 """
 import sys
 
+USAGE = """Uso:
+  python scripts/check_encoding.py <ficheros...>
+  python scripts/check_encoding.py --help
+
+Detecta ficheros no UTF-8 o con mojibake frecuente.
+"""
+
 # Secuencias de mojibake frecuentes al re-decodificar UTF-8 como latin-1.
 MOJIBAKE = ("Ã±", "Ã³", "Ã©", "Ã­", "Ãº", "Ã¡", "Â¿", "Â¡", "â€")
 
@@ -30,6 +37,12 @@ def check(path: str) -> list[str]:
 
 
 def main(argv: list[str]) -> int:
+    if "--help" in argv or "-h" in argv:
+        print(USAGE.strip())
+        return 0
+    if len(argv) == 1:
+        print(USAGE.strip(), file=sys.stderr)
+        return 2
     found: list[str] = []
     for path in argv[1:]:
         found.extend(check(path))

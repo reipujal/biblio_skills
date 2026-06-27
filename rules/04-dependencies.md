@@ -20,4 +20,9 @@ aislamiento y provoca conflictos de versión entre proyectos. Los instalables no
 en la sección "Comandos" del `AGENTS.md` del repo.
 
 [CI] La coherencia "lo importado está declarado / lo declarado está instalado" es
-comprobable y se enforca en pre-commit (ver `ci-templates/`).
+comprobable y se enforca con checks de `ci-templates/`.
+
+[CI] Todo entorno automatizado debe instalar desde `requirements.lock` con
+`uv pip sync requirements.lock`. No uses `pip install -r requirements.txt` en CI, hooks ni
+documentación nueva. Si un proyecto legado trae `requirements.txt`, migra a
+`requirements.in` + `requirements.lock` antes de aplicar estas plantillas.

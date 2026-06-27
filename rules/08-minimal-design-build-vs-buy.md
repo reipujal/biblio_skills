@@ -11,6 +11,12 @@ Añade complejidad solo por un requisito concreto o un riesgo conocido, específ
 expuesto, acción irreversible) cuenta—. No uses riesgos genéricos para justificar frameworks,
 abstracciones o automatización anticipada.
 
+**"No hacer nada" es una opción.** Cuando evalúes crear, ampliar o extraer una capacidad,
+comprueba primero si el repo ya cubre el caso con una regla, skill, workflow, plantilla CI o
+memoria. Si está cubierto y no hay hueco real, responde "no" y referencia la fuente existente;
+no propongas una variante solo porque sea plausible. Si hay hueco real, formula la mejora
+mínima.
+
 **Reutilizar antes de construir.** Antes de implementar una capacidad propia —métrica, harness,
 pipeline, evaluador, parser, orquestador, extractor, integración— revisa si existe una
 herramienta, librería, estándar o patrón maduro que ya resuelva la parte genérica.

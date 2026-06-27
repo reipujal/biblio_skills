@@ -72,6 +72,7 @@ frontmatter de cada `skills/<nombre>/SKILL.md`. Hoy el catálogo incluye:
 - `memory-keeper`
 - `multi-agent-collaboration`
 - `project-bootstrap`
+- `project-guardrails-audit`
 - `skill-development-framework`
 - `skill-finder`
 

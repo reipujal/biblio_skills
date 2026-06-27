@@ -11,6 +11,14 @@ Escanea docs/memory/*.md (saltando MEMORY.md), lee su frontmatter, y emite MEMOR
 import sys
 from pathlib import Path
 
+USAGE = """Uso:
+  python build_memory_index.py <dir docs/memory>
+  python build_memory_index.py <dir docs/memory> --check
+  python build_memory_index.py --help
+
+Genera o valida MEMORY.md escaneando memorias markdown con frontmatter.
+"""
+
 VALID_TYPES = {"user", "feedback", "project", "reference"}
 
 
@@ -21,11 +29,24 @@ def parse_frontmatter(md: Path) -> dict:
     end = text.find("\n---", 3)
     if end == -1:
         return {}
-    data, key = {}, None
+    data, key, in_metadata = {}, None, False
     for line in text[3:end].splitlines():
+        stripped = line.strip()
+        if not stripped:
+            continue
+        if stripped == "metadata:":
+            in_metadata = True
+            key = None
+            continue
         if line[:1].isspace() and key:
             data[key] += " " + line.strip()
             continue
+        if line[:1].isspace() and in_metadata and ":" in stripped:
+            k, _, v = stripped.partition(":")
+            if k.strip() == "type":
+                data["type"] = v.strip().strip('"').strip("'")
+            continue
+        in_metadata = False
         if ":" in line:
             k, _, v = line.partition(":")
             k, v = k.strip(), v.strip().strip('"').strip("'")
@@ -71,10 +92,18 @@ def render(entries) -> str:
 
 
 def main(argv) -> int:
+    if "--help" in argv or "-h" in argv:
+        print(USAGE.strip())
+        return 0
+    unknown = [a for a in argv if a.startswith("-") and a != "--check"]
+    if unknown:
+        print(f"Argumento no reconocido: {unknown[0]}", file=sys.stderr)
+        print(USAGE.strip(), file=sys.stderr)
+        return 2
     args = [a for a in argv if not a.startswith("--")]
     check = "--check" in argv
     if not args:
-        print("Uso: build_memory_index.py <dir docs/memory> [--check]", file=sys.stderr)
+        print(USAGE.strip(), file=sys.stderr)
         return 2
     mem_dir = Path(args[0])
     if not mem_dir.is_dir():

@@ -13,6 +13,14 @@ import re
 import sys
 from pathlib import Path
 
+USAGE = """Uso:
+  python scripts/build_index.py
+  python scripts/build_index.py --check
+  python scripts/build_index.py --help
+
+Genera o valida INDEX.json escaneando skills/*/SKILL.md.
+"""
+
 REPO = Path(__file__).resolve().parent.parent
 SKILLS = REPO / "skills"
 OUT = REPO / "INDEX.json"
@@ -97,6 +105,14 @@ def catalog_obj(entries):
 
 
 def main(argv) -> int:
+    if "--help" in argv or "-h" in argv:
+        print(USAGE.strip())
+        return 0
+    unknown = [a for a in argv if a.startswith("-") and a != "--check"]
+    if unknown:
+        print(f"Argumento no reconocido: {unknown[0]}", file=sys.stderr)
+        print(USAGE.strip(), file=sys.stderr)
+        return 2
     if not SKILLS.is_dir():
         print(f"No existe {SKILLS}", file=sys.stderr)
         return 1

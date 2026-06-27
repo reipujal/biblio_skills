@@ -164,7 +164,9 @@ mkdir -p .github/workflows scripts
 cp <biblio_skills>/ci-templates/github-actions-ci.yml .github/workflows/ci.yml
 cp <biblio_skills>/ci-templates/check_encoding.py scripts/check_encoding.py
 
-pip install pre-commit detect-secrets
+# Si ya ejecutaste setup/bootstrap-machine.sh, estas CLIs ya están instaladas.
+uv tool install pre-commit
+uv tool install detect-secrets
 pre-commit install
 detect-secrets scan > .secrets.baseline
 ```
