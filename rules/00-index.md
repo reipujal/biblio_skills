@@ -18,6 +18,7 @@ tiene un enforcement automático asociado.
 | `06-reasoning-discipline.md`| exploración vs. confirmación; hechos vs. hipótesis; síntoma vs. causa; cierre razonado |
 | `07-skill-discovery.md`     | consultar el catálogo de skills antes de improvisar         |
 | `08-minimal-design-build-vs-buy.md` | empezar por lo mínimo; reutilizar antes de construir; riesgos explícitos |
+| `09-resilience-and-stability.md`    | idempotencia estricta en scripts; fallar rápido y ruidoso (no ahogar errores) |
 
 Excepción transversal a todas: sesiones de solo lectura, exploración o cambios
 exclusivos de documentación quedan exentas de los gates de cierre.

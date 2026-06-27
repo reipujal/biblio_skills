@@ -3,7 +3,7 @@
 **Al cerrar cualquier sesión con cambios en disco** (código, tests, config, docs):
 
 1. `git status` — identifica qué cambió.
-2. Commit agrupado con mensaje descriptivo del conjunto.
+2. **Commits atómicos secuenciales** — NUNCA agrupes cambios de naturaleza distinta (ej: refactor de código y actualización de README) en un solo "commit Frankenstein". Haz los `git add` y `git commit` por separado de forma automática y secuencial, **sin pedir intervención al usuario**.
 3. `git push` para sincronizar con el remote.
 
 Si el proyecto no tiene remote, avísalo: los cambios locales no tienen backup.

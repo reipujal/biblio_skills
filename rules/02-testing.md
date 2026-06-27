@@ -8,6 +8,7 @@
 - Antes de declarar una tarea completada, la suite pasa al 100%. Un test en rojo
   **bloquea** el cierre. Si un fallo es deuda preexistente ajena al cambio, se
   documenta explícitamente — nunca se silencia.
+- **Política de Mocks:** Mockea solo las fronteras puras (APIs externas/Red/BBDD productivas/Tiempo). Todo el código interno propio debe probarse de forma real y conectada. El "sobre-mockeo" de funciones y clases internas está prohibido porque genera tests que pasan siempre pero no verifican nada.
 
 Razón: el test escrito junto al código es el que de verdad refleja la intención;
 añadido después tiende a ratificar lo que hay en vez de comprobarlo.
