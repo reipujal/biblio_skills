@@ -74,34 +74,39 @@ Si no sabes qué significa esto, usa la opción A.
 Este paso es importante. El comando del bootstrap debe ejecutarse dentro de la
 carpeta `biblio_skills`.
 
+Vas a usar el **Explorador de archivos de Windows**, no el navegador. No escribas
+esto en Chrome, Edge, Bing ni Google.
+
 Hazlo así:
 
 1. Abre la carpeta extraída de `biblio_skills`.
 2. Comprueba que ves `README.md`, `AGENTS.md`, `install.ps1` y la carpeta `setup`.
-3. En la parte superior del Explorador de Windows hay una barra con la ruta de la
-   carpeta. Suele parecerse a:
+3. Mira la parte superior de esa ventana de carpeta. Hay una barra de dirección.
+   Es la barra del Explorador de Windows, no la barra del navegador. Puede verse
+   así:
 
    ```text
    Este equipo > Descargas > biblio_skills-main
    ```
 
-4. Haz clic una vez dentro de esa barra de dirección.
+4. Haz clic una vez dentro de esa barra de dirección del Explorador.
 5. El texto se convertirá en una ruta, por ejemplo:
 
    ```text
    C:\Users\TuNombre\Downloads\biblio_skills-main
    ```
 
-6. Borra lo que haya escrito en esa barra.
-7. Escribe:
+6. Sin abrir el navegador, borra lo que haya escrito en esa barra.
+7. Escribe exactamente esta palabra: `powershell`
 
-   ```text
-   powershell
-   ```
-
-8. Pulsa `Enter`.
+   No escribas `text powershell`. No escribas comillas. Solo `powershell`.
+8. Pulsa `Enter` en el teclado.
 
 Se abrirá una ventana de PowerShell ya colocada dentro de la carpeta correcta.
+
+Si en vez de abrirse PowerShell aparece una búsqueda en Bing/Google, estabas en
+el navegador, no en el Explorador de Windows. Vuelve a la carpeta descargada y
+repite este paso desde la ventana donde se ven `README.md` y `setup`.
 
 Cómo saber que estás en la carpeta correcta:
 
