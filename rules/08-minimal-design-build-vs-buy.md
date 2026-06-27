@@ -42,3 +42,5 @@ documenta por qué. La novedad no es un defecto; la novedad **no investigada** s
 principales (diseño, ejecución, operación, reversibilidad) — identificarlos no obliga a
 mitigarlos, solo a no ocultarlos. Si construyes a medida pese a existir alternativa madura,
 documenta la alternativa descartada, el trade-off aceptado y qué haría reconsiderar la decisión.
+
+**Prioriza la comprensión humana sobre la elegancia o la generalidad: ante dos soluciones, gana la más fácil de entender y mantener, aunque sea menos elegante o algo menos general.
