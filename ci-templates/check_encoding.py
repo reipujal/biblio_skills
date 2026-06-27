@@ -1,25 +1,42 @@
 #!/usr/bin/env python3
-"""Detecta ficheros de texto no-UTF-8 o con mojibake típico (ej. 'Ã±' por 'ñ').
+"""Detect non-UTF-8 text files and common mojibake artifacts.
 
-Uso: python scripts/check_encoding.py <ficheros...>
-Sale con codigo != 0 si encuentra problemas (apto para pre-commit).
-Derivado de la regla de encoding del protocolo de colaboracion.
+Usage: python scripts/check_encoding.py <files...>
+Exits non-zero when it finds problems, so it is suitable for pre-commit.
 """
 import re
 import sys
 
-USAGE = """Uso:
-  python scripts/check_encoding.py <ficheros...>
+USAGE = """Usage:
+  python scripts/check_encoding.py <files...>
   python scripts/check_encoding.py --help
 
-Detecta ficheros no UTF-8 o con mojibake frecuente.
+Detects non-UTF-8 files and common mojibake artifacts.
 """
 
-# Secuencias de mojibake frecuentes al re-decodificar UTF-8 como latin-1.
-MOJIBAKE = ("Ã±", "Ã³", "Ã©", "Ã­", "Ãº", "Ã¡", "Â¿", "Â¡", "â€")
+# Keep suspicious tokens escaped so this checker does not flag its own source.
+MOJIBAKE = (
+    "\u00c3\u00b1",  # n with tilde decoded as latin-1 once
+    "\u00c3\u00b3",
+    "\u00c3\u00a9",
+    "\u00c3\u00ad",
+    "\u00c3\u00ba",
+    "\u00c3\u00a1",
+    "\u00c2\u00bf",
+    "\u00c2\u00a1",
+    "\u00c3\u0192\u00c2\u00b1",  # decoded as latin-1 twice
+    "\u00c3\u0192\u00c2\u00b3",
+    "\u00c3\u0192\u00c2\u00a9",
+    "\u00c3\u0192\u00c2\u00ad",
+    "\u00c3\u0192\u00c2\u00ba",
+    "\u00c3\u0192\u00c2\u00a1",
+    "\u00c3\u201a\u00c2\u00bf",
+    "\u00c3\u201a\u00c2\u00a1",
+    "\u00ef\u00bf\u00bd",  # replacement character rendered through mojibake
+)
 
-# Rangos CJK: Han, Hiragana/Katakana, Hangul — no esperados en repo español/inglés.
-_CJK = re.compile(r"[一-鿿぀-ヿ가-힯]")
+# CJK ranges: Han, Hiragana/Katakana, Hangul. Unexpected in this Spanish/English repo.
+_CJK = re.compile(r"[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]")
 
 
 def check(path: str) -> list[str]:
@@ -32,13 +49,15 @@ def check(path: str) -> list[str]:
     try:
         text = raw.decode("utf-8")
     except UnicodeDecodeError:
-        problems.append(f"{path}: no es UTF-8 valido")
+        problems.append(f"{path}: not valid UTF-8")
         return problems
     for token in MOJIBAKE:
         if token in text:
-            problems.append(f"{path}: posible mojibake '{token}' (re-guardar como UTF-8)")
+            problems.append(f"{path}: possible mojibake token found")
+    if "\ufffd" in text:
+        problems.append(f"{path}: replacement character found")
     if _CJK.search(text):
-        problems.append(f"{path}: carácter CJK/script inesperado (posible artefacto de generación)")
+        problems.append(f"{path}: unexpected CJK/script character")
     return problems
 
 
