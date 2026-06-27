@@ -32,7 +32,7 @@ python main.py --query "..." --limit 100 --output output/out.csv
 | Error | Causa | Solución |
 |-------|-------|----------|
 | `EnvironmentError: API_KEY...` | falta en `.env` | añadirla |
-| `ModuleNotFoundError` | dependencia no instalada | `pip install -r requirements.txt` |
+| `ModuleNotFoundError` | dependencia no instalada | `uv pip sync requirements.lock` |
 
 ## Notas
 - Idempotente: misma entrada dos veces no duplica datos.

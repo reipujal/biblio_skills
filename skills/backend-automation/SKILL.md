@@ -25,7 +25,8 @@ automatizaciones/
     └── <categoria>/<tarea>/
         ├── TASK.md          # documentación de uso (obligatorio)
         ├── main.py          # entrypoint
-        ├── requirements.txt  # versiones fijadas
+        ├── requirements.in   # dependencias directas
+        ├── requirements.lock # árbol completo clavado
         └── tests/
 ```
 
