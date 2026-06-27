@@ -14,6 +14,11 @@ repos:
         entry: python ci-templates/check_encoding.py
         language: system
         types: [text]
+      - id: check-imports
+        name: imports @import sin rotura
+        entry: python ci-templates/check_imports.py
+        language: system
+        files: \.md$
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.6.9
     hooks:
