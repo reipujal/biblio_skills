@@ -209,16 +209,24 @@ No se instalan globalmente porque cada proyecto tiene comandos, tests y stack
 propios. `project-bootstrap` los usa al crear repos nuevos y
 `project-guardrails-audit` decide qué aplica en repos existentes.
 
-## `INDEX.json`
+## `INDEX.json` (Mantenimiento, No Instalación)
 
 Es el catálogo generado de skills. No se edita a mano.
 
-Si cambias una skill, ejecuta:
+No lo regenera `install.ps1` ni `install.sh`. Eso es deliberado: los instaladores
+solo conectan una versión ya preparada de `biblio_skills` con Antigravity. No
+deben modificar archivos versionados del repo durante una instalación normal.
+
+Solo necesitas tocar `INDEX.json` si estás manteniendo la biblioteca y has creado,
+borrado o cambiado el frontmatter de una skill. En ese caso, antes de commitear,
+ejecuta:
 
 ```bash
 python scripts/build_index.py
 python scripts/build_index.py --check
 ```
+
+Si solo estás instalando `biblio_skills` en una máquina, ignora esta sección.
 
 ## `docs/ANTIGRAVITY.md`
 
