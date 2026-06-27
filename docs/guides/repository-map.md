@@ -157,6 +157,42 @@ Hoy el principal es:
 
 Un workflow se invoca manualmente. No se activa por descripción como una skill.
 
+## Memoria Portable Y `/compact`
+
+`memory-keeper` sirve para guardar hechos importantes del proyecto en Markdown
+versionado, normalmente bajo `docs/memory/`. Es memoria portable: va en git, la
+puede leer cualquier harness y sobrevive a cambiar de ordenador o de modelo.
+
+Úsala cuando:
+
+- tomas una decisión que afectará sesiones futuras;
+- corriges una suposición del agente;
+- descubres una convención local no obvia;
+- cierras una investigación y quieres conservar la conclusión;
+- vas a compactar o reiniciar una conversación larga.
+
+Esto es distinto de dejarlo perdido en el chat. El chat puede compactarse,
+cortarse o no estar disponible para otro agente; la memoria portable queda en el
+repo.
+
+Después de guardar lo importante en memoria, conviene compactar la conversación
+si el harness lo permite. En Claude Code, por ejemplo, usa:
+
+```text
+/compact
+```
+
+En otros LLM o IDEs, usa el mecanismo equivalente: resumir, compactar, reiniciar
+la conversación o abrir una nueva. La lógica es:
+
+```text
+guardar lo importante en memoria -> compactar/reiniciar chat -> seguir trabajando con menos tokens
+```
+
+Esto ahorra contexto y reduce coste/latencia sin perder decisiones importantes.
+Primero guarda; luego compacta. Si compactas antes de persistir, puedes perder
+matices útiles o decisiones que aún no estaban en ningún archivo.
+
 ## `ci-templates/`
 
 Son plantillas de guardrails automáticos para proyectos.
@@ -220,6 +256,19 @@ Pide en chat:
 
 ```text
 Guarda esta decisión en memoria portable.
+```
+
+Después de que el agente la guarde y la deje en git, si la conversación está
+larga, en Claude Code puedes pedir:
+
+```text
+/compact
+```
+
+O en cualquier otro LLM:
+
+```text
+Compacta o resume la conversación usando la memoria portable como fuente.
 ```
 
 ### Cambié Rules O Skills En `biblio_skills`
