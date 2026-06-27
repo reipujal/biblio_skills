@@ -54,6 +54,7 @@ biblio_skills/
 ├── setup/                     # bootstrap global de máquina y plantilla de stack Python
 ├── scripts/                   # mantenimiento del repo, como build_index.py
 └── docs/
+    ├── guides/                # guías de instalación, depuración y uso
     └── ANTIGRAVITY.md         # mecánica verificada de Antigravity
 ```
 
@@ -174,6 +175,9 @@ referenciables y con dueño claro.
 El README debe ser una brújula, no el manual completo. Las fuentes especializadas
 son:
 
+- Instalación paso a paso: `docs/guides/bootstrap-windows.md`
+- Depuración del bootstrap para LLM: `docs/guides/bootstrap-debug-llm.md`
+- Uso del repositorio: `docs/guides/repository-map.md`
 - Gobierno del repositorio: `AGENTS.md`
 - Diseño de skills: `skills/skill-development-framework/`
 - Mecánica de Antigravity: `docs/ANTIGRAVITY.md`
