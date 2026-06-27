@@ -44,8 +44,10 @@ del arranque.
    `uv venv` · `uv pip compile requirements.in -o requirements.lock` · `uv pip sync
    requirements.lock`. El `requirements.lock` (árbol completo clavado) va en git; es lo
    reproducible. Declara los comandos de restauración en la sección "Comandos" del
-   `AGENTS.md`. El **toolchain global** (Python fijado, pre-commit, ruff, poppler) NO va
-   por proyecto: lo instala una vez `setup/bootstrap-machine.sh`.
+   `AGENTS.md`. El **toolchain global** (Git/GitHub CLI, Python fijado,
+   pre-commit, detect-secrets, ruff, poppler y conexión de biblio_skills con
+   Antigravity) NO va por proyecto: lo instala una vez `setup/bootstrap-machine.ps1`
+   en Windows o `setup/bootstrap-machine.sh` en Unix/WSL.
 
 5. **Seguridad de arranque** → `.gitignore` excluye `.env`, outputs, logs, caches
    (`templates/gitignore.txt`). `.env.example` con las variables sin valores.

@@ -1,205 +1,156 @@
 # User Guide
 
-Esta guía explica qué usar en `biblio_skills` según la situación. La idea es
-simple: no tienes que recordar todos los ficheros; tienes que saber qué puerta
-abrir.
+Esta guía tiene una idea central: después de instalar Antigravity, una persona
+debería poder clonar `biblio_skills`, ejecutar un bootstrap y vivir en chat sin
+memorizar la arquitectura del repo.
 
-## Mapa Mental
+## Camino Feliz
 
-`biblio_skills` tiene varios tipos de piezas:
-
-| Pieza | Qué es | Cuándo se usa |
-| --- | --- | --- |
-| `setup/` | Preparación global de tu máquina | Cuando estrenas o reinstalas un PC |
-| `install.ps1` / `install.sh` | Conexión entre `biblio_skills` y Antigravity | Cuando quieres que Antigravity vea las reglas y skills |
-| `rules/` | Reglas universales para agentes | Siempre, en cualquier proyecto |
-| `skills/` | Capacidades que el agente carga bajo demanda | Cuando la petición encaja con una skill |
-| `workflows/` | Comandos manuales tipo `/cierre` | Cuando los instalas en un proyecto y los invocas |
-| `ci-templates/` | Plantillas de checks automáticos | Cuando creas/configuras un proyecto concreto |
-
-Piensa así:
+Primera instalación de una máquina:
 
 ```text
-Nuevo PC        -> setup/
-Conectar IA     -> install.ps1 / install.sh
-Nuevo proyecto  -> project-bootstrap
-Checks duros    -> ci-templates/
-Trabajo diario  -> rules + skills + workflows
+Instalar Antigravity
+Clonar o descargar biblio_skills
+Ejecutar setup/bootstrap-machine
+Reabrir Antigravity
+Trabajar por chat
 ```
 
-## Si Vas A Un Nuevo PC
+Si ya tienes Git:
 
-Objetivo: dejar la máquina preparada para trabajar con proyectos asistidos por IA.
+```powershell
+git clone https://github.com/reipujal/biblio_skills.git
+cd biblio_skills
+```
 
-1. Clona este repositorio:
+Si todavía no tienes Git, descarga el ZIP del repo desde GitHub, descomprímelo y
+abre una terminal en esa carpeta. El bootstrap instalará Git y GitHub CLI para el
+trabajo posterior.
 
-   ```bash
-   git clone https://github.com/reipujal/biblio_skills.git
-   cd biblio_skills
-   ```
+Windows:
 
-2. Prepara el toolchain global:
+```powershell
+pwsh -File setup\bootstrap-machine.ps1
+```
 
-   ```bash
-   ./setup/bootstrap-machine.sh
-   ```
+WSL/Linux/macOS:
 
-   Esto prepara cosas de máquina, no de proyecto: Python gestionado por `uv`,
-   herramientas globales como `pre-commit`, `detect-secrets`, `ruff`, y comprueba
-   herramientas externas como `poppler-utils`.
+```bash
+./setup/bootstrap-machine.sh
+```
 
-3. Conecta `biblio_skills` con Antigravity.
+Qué deja preparado:
 
-   En Windows:
+- Git y GitHub CLI disponibles.
+- GitHub CLI autenticado, o un error claro pidiendo `gh auth login`.
+- `uv` disponible como gestor del toolchain Python.
+- Python gestionado por `uv`.
+- CLIs globales aisladas: `pre-commit`, `detect-secrets`, `ruff`.
+- Poppler disponible para trabajo con PDFs.
+- Rules y skills de `biblio_skills` conectadas con Antigravity.
+- Workflows instalables por proyecto cuando pases `-Project` / `--project`.
 
-   ```powershell
-   pwsh -File install.ps1 -DryRun
-   pwsh -File install.ps1
-   ```
-
-   En WSL/Linux:
-
-   ```bash
-   ./install.sh --dry-run
-   ./install.sh
-   ```
-
-4. Reinicia Antigravity y verifica que el agente nativo ve las skills.
-
-   Importante: dentro de Antigravity puede haber varios paneles. Las skills de este
-   repo están pensadas para el agente nativo de Antigravity, no para el panel de
-   Claude Code.
-
-Resultado esperado:
+Al terminar, reabre Antigravity y pregunta al agente nativo:
 
 ```text
-Tu PC tiene herramientas globales.
-Antigravity ve las rules.
-Antigravity ve las skills.
-biblio_skills sigue siendo la fuente de verdad.
+qué skills tienes disponibles?
 ```
 
-## Si Quieres Crear Un Proyecto Nuevo En Este PC
+Importante: dentro de Antigravity puede haber varios paneles. Las skills de este
+repo se instalan para el agente nativo de Antigravity, no para el panel Claude
+Code embebido.
 
-Objetivo: arrancar un repo nuevo con estructura, gobierno y barreras desde el
-primer commit.
+## Qué Ejecutar
 
-Usa la skill:
+| Situación | Comando o acción |
+| --- | --- |
+| Estreno o reinstalo un PC Windows | `pwsh -File setup\bootstrap-machine.ps1` |
+| Estreno o reinstalo un PC WSL/Linux/macOS | `./setup/bootstrap-machine.sh` |
+| Quiero instalar también `/cierre` en un repo Windows | `pwsh -File setup\bootstrap-machine.ps1 -Project C:\ruta\a\repo` |
+| Quiero instalar también `/cierre` en un repo Unix | `./setup/bootstrap-machine.sh --project /ruta/a/repo` |
+| Ya tengo toolchain y solo quiero reconectar rules/skills | `pwsh -File install.ps1` o `./install.sh` |
+| Empiezo un proyecto nuevo | En chat: `Voy a empezar un proyecto nuevo. Usa project-bootstrap.` |
+| Reviso guardrails de un repo existente | En chat: `Usa project-guardrails-audit.` |
+| No sé si hay una skill para algo | En chat: `Busca si ya existe una skill para esto.` |
 
-```text
-project-bootstrap
-```
+## Qué Hace Cada Capa
 
-Puedes pedírselo al agente así:
+`setup/bootstrap-machine.*` es el botón de primera instalación. Prepara la
+máquina y después llama al instalador de la biblioteca.
+
+`install.ps1` / `install.sh` solo conectan `biblio_skills` con Antigravity:
+enlazan skills, propagan rules y, si se indica un proyecto, instalan workflows.
+Son útiles para refrescar la biblioteca después de cambios, pero no son el
+camino principal para una máquina nueva.
+
+`project-bootstrap` configura repos nuevos. No reinstala la máquina: crea la
+estructura del proyecto, sus guardrails, su `AGENTS.md`, sus tests iniciales y su
+flujo reproducible.
+
+`ci-templates/` son plantillas por proyecto. No se instalan globalmente porque
+cada repo tiene comandos, tests y stack propios.
+
+## Crear Un Proyecto Nuevo
+
+Una vez ejecutado el bootstrap global, pide al agente:
 
 ```text
 Voy a empezar un proyecto nuevo. Usa project-bootstrap.
 ```
 
-O así:
-
-```text
-Móntame un repo nuevo para <objetivo> con AGENTS.md, tests, CI y pre-commit.
-```
-
 La skill debería encargarse de:
 
-- Crear `AGENTS.md` del proyecto.
-- Crear `README.md`.
-- Crear `.gitignore`.
-- Crear `.env.example`.
-- Crear estructura mínima (`src/`, `tests/`, etc. si aplica).
-- Preparar dependencias reproducibles si es Python (`requirements.in` y lock).
-- Copiar las plantillas necesarias de `ci-templates/`.
+- Crear el `AGENTS.md` del proyecto.
+- Crear `README.md`, `.gitignore` y `.env.example`.
+- Crear la estructura mínima real del proyecto.
+- Preparar dependencias reproducibles si es Python: `requirements.in` y
+  `requirements.lock`.
+- Copiar/adaptar guardrails de `ci-templates/`.
 - Declarar comandos de instalar, probar y ejecutar.
-- Instalar el workflow `/cierre` en ese proyecto si lo necesitas.
-- Hacer un primer commit y push si hay remote.
+- Instalar `/cierre` en ese proyecto si lo necesitas.
+- Hacer commit y push si existe remote.
 
-Lo importante: `project-bootstrap` configura el proyecto. No debería reinstalar
-todo el PC salvo que detecte que falta algo global y te lo diga.
+Si el proyecto ya existe y quieres saber qué checks le faltan, usa
+`project-guardrails-audit` en vez de copiar plantillas a mano.
 
-## Si Quieres Que Antigravity Vea Las Skills Y Rules
+## Trabajo Diario
 
-Usa el instalador del repo:
+Normalmente no invocas archivos del repo directamente:
 
-```text
-install.ps1    -> Windows
-install.sh     -> WSL/Linux
-```
+- Las `rules/` están siempre de fondo.
+- Las `skills/` se activan cuando tu petición encaja con su descripción.
+- Los `workflows/` se invocan explícitamente, por ejemplo `/cierre`.
+- Los checks de `ci-templates/` corren por pre-commit o CI en cada repo.
 
-Qué hace:
-
-- Enlaza `skills/<x>/` hacia la carpeta global de skills de Antigravity.
-- Escribe un bloque gestionado de reglas en `~/.gemini/GEMINI.md`.
-- Opcionalmente instala workflows en un proyecto concreto.
-
-Ejemplo Windows para instalar también `/cierre` en un proyecto:
-
-```powershell
-pwsh -File install.ps1 -Project C:\ruta\a\mi-proyecto
-```
-
-Ejemplo WSL/Linux:
-
-```bash
-./install.sh --project /ruta/a/mi-proyecto
-```
-
-Los workflows no son globales en Antigravity: hay que instalarlos por proyecto.
-
-## Si Quieres Usar `ci-templates/`
-
-Objetivo: poner barreras automáticas en un proyecto concreto.
-
-`ci-templates/` es un catálogo de guardrails, **no un repositorio de "copia y pega todo"**. No se instala globalmente y no se debe volcar entero a ciegas.
-
-- Si el repo es nuevo: usa `project-bootstrap` (él instalará el baseline adecuado).
-- Si el repo ya existe: usa la skill `project-guardrails-audit`. Ella analizará el proyecto contra las condiciones del catálogo y te propondrá **qué aplica, qué falta y si hay algún hueco de riesgo**, sin romper lo que ya tienes.
-
-Desde la raíz del proyecto destino, si necesitas instalar manualmente los guardrails disponibles (que apliquen):
-
-```bash
-cp <biblio_skills>/ci-templates/pre-commit-config.yaml .pre-commit-config.yaml
-mkdir -p .github/workflows scripts
-cp <biblio_skills>/ci-templates/github-actions-ci.yml .github/workflows/ci.yml
-cp <biblio_skills>/ci-templates/check_encoding.py scripts/check_encoding.py
-
-# Si ya ejecutaste setup/bootstrap-machine.sh, estas CLIs ya están instaladas.
-uv tool install pre-commit
-uv tool install detect-secrets
-pre-commit install
-detect-secrets scan > .secrets.baseline
-```
-
-Después ajusta `.github/workflows/ci.yml` al comando real de tests de ese proyecto.
-
-Qué significa cada pieza:
-
-- `.pre-commit-config.yaml`: checks antes de cada commit.
-- `.github/workflows/ci.yml`: checks en GitHub al hacer push o PR.
-- `scripts/check_encoding.py`: detector de texto roto por encoding.
-
-## Si Quieres Saber Qué Skills Hay
-
-Mira:
+Ejemplos de chat:
 
 ```text
-INDEX.json
+Móntame un repo nuevo para analizar PDFs. Usa project-bootstrap.
 ```
 
-Ese catálogo se genera desde los `SKILL.md`. No se edita a mano.
+```text
+Este repo ha crecido; audita qué guardrails le faltan.
+```
 
-Skills actuales:
+```text
+Guarda esta decisión en memoria portable.
+```
+
+## Catálogo De Skills
+
+El catálogo vive en `INDEX.json` y se genera desde los `SKILL.md`. No se edita a
+mano.
+
+Skills principales:
 
 - `audit-board`: auditoría adversarial multi-rol.
-- `backend-automation`: scripts backend, scraping, ETL, tareas recurrentes.
-- `memory-keeper`: memoria portable del proyecto en Markdown.
-- `multi-agent-collaboration`: coordinación entre varios modelos/agentes, incluido
-  el bucle Director/Sonnet -> Codex -> tests -> reporte.
-- `project-bootstrap`: arrancar proyectos nuevos.
-- `project-guardrails-audit`: auditar repos existentes contra el catálogo de `ci-templates/` para decidir qué aplica y detectar huecos sin sobrescribir a lo bruto.
-- `skill-development-framework`: crear o revisar skills.
-- `skill-finder`: buscar si ya existe una skill para una tarea.
+- `backend-automation`: scripts backend, scraping, ETL y tareas recurrentes.
+- `memory-keeper`: memoria portable en Markdown versionado.
+- `multi-agent-collaboration`: coordinación entre modelos/agentes.
+- `project-bootstrap`: arranque de repos nuevos.
+- `project-guardrails-audit`: revisión de guardrails en repos existentes.
+- `skill-development-framework`: diseño o revisión de skills.
+- `skill-finder`: búsqueda de skills existentes.
 
 Si cambias o añades una skill:
 
@@ -208,92 +159,15 @@ python scripts/build_index.py
 python scripts/build_index.py --check
 ```
 
-## Si Quieres Crear Una Skill Nueva
-
-No empieces creando carpetas.
-
-Primero usa:
-
-```text
-skill-development-framework
-```
-
-Regla práctica:
-
-```text
-Si solo lo usarás una vez -> no es skill.
-Si es específico de un proyecto -> va en ese proyecto.
-Si es una práctica global y repetida -> puede ser skill.
-Si es determinista -> mejor CI/script/hook.
-```
-
-Una skill nueva solo debería entrar en `biblio_skills` cuando el patrón ya fue
-usado y validado varias veces.
-
-## Si Estás Trabajando Día A Día
-
-Normalmente no llamas a todo manualmente. El reparto es:
-
-- Las `rules/` están siempre de fondo.
-- Las `skills/` se activan cuando el agente detecta que aplican.
-- Los `workflows/` se invocan a mano, por ejemplo `/cierre`.
-- Los checks de `ci-templates/` se ejecutan por Git, pre-commit o GitHub Actions.
-
-Ejemplo de cierre de sesión:
-
-```text
-/cierre
-```
-
-Eso solo funciona si el workflow fue instalado en el proyecto actual.
-
-## Si Quieres Que Sonnet Dirija Y Codex Codifique
-
-Usa:
-
-```text
-multi-agent-collaboration
-```
-
-El patrón recomendado es:
-
-```text
-Sonnet/Director escribe una tarea en docs/tasks/codex/
-Codex lee la tarea, codifica, crea o ajusta tests y ejecuta los tests
-Codex rellena el handoff con cambios, comandos y resultado verificable
-Sonnet/Director revisa y marca DONE o devuelve correcciones
-```
-
-No es para todo. Úsalo cuando quieras separar dirección y ejecución, o cuando el
-trabajo sea lo bastante grande como para necesitar una spec persistente. Para fixes
-triviales, un solo agente puede bastar.
-
-## Qué Hacer En Cada Caso
-
-| Caso | Qué usar |
-| --- | --- |
-| Estreno PC | `setup/bootstrap-machine.sh` |
-| Quiero que Antigravity vea la biblioteca | `install.ps1` o `install.sh` |
-| Empiezo un repo nuevo | `project-bootstrap` |
-| Quiero auditar qué checks de CI/guardrails aplicar en un repo | `project-guardrails-audit` |
-| Quiero checks automáticos de forma manual en un repo | `ci-templates/` (vía `project-guardrails-audit` si no sabes qué aplica) |
-| Quiero guardar memoria portable | `memory-keeper` |
-| Quiero que Sonnet dirija y Codex implemente/tests | `multi-agent-collaboration` |
-| Quiero revisar un sistema con dureza | `audit-board` |
-| Quiero crear una skill | `skill-development-framework` |
-| No sé si ya hay una skill | `skill-finder` |
-
 ## Regla Final
-
-No copies conocimiento por copiar.
 
 Usa esta lógica:
 
 ```text
-Máquina nueva      -> bootstrap
-Biblioteca global  -> install
-Proyecto nuevo     -> project-bootstrap
-Checks del proyecto -> ci-templates
+Máquina nueva       -> setup/bootstrap-machine
+Refrescar biblioteca -> install.ps1 / install.sh
+Proyecto nuevo      -> project-bootstrap
+Checks de proyecto  -> project-guardrails-audit + ci-templates
 Conocimiento reusable -> skills
-Juicio universal   -> rules
+Juicio universal    -> rules
 ```

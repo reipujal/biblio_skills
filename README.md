@@ -45,8 +45,8 @@ biblio_skills/
 ├── AGENTS.md                  # gobierno del repo: rol del agente, principios y DoD
 ├── README.md                  # puerta de entrada conceptual
 ├── INDEX.json                 # catálogo autogenerado de skills
-├── install.ps1                # instalación Windows: junctions y bloque de rules
-├── install.sh                 # instalación WSL/Linux: symlinks y bloque de rules
+├── install.ps1                # conexión Windows: junctions y bloque de rules
+├── install.sh                 # conexión WSL/Linux: symlinks y bloque de rules
 ├── rules/                     # reglas universales, siempre activas
 ├── skills/                    # skills reutilizables, cargadas bajo demanda
 ├── workflows/                 # workflows invocables; Antigravity no los carga globalmente
@@ -83,27 +83,57 @@ python scripts/build_index.py
 python scripts/build_index.py --check
 ```
 
-## Instalación
+## Primera Instalación De Máquina
 
-El repositorio es la fuente de verdad. La instalación no debería crear copias
-manuales de los activos reutilizables; debería enlazarlos o escribir bloques
-gestionados.
+La secuencia esperada es:
+
+```text
+instalar Antigravity -> clonar/descargar biblio_skills -> ejecutar bootstrap-machine -> vivir en chat
+```
+
+`setup/bootstrap-machine.*` es el botón único de máquina nueva: verifica/instala
+el toolchain global, comprueba GitHub CLI, prepara Python y CLIs globales, verifica
+Poppler y después conecta `biblio_skills` con Antigravity llamando a `install.*`.
+Si Git aún no está disponible, el repo puede descargarse como ZIP; el bootstrap
+dejará Git y GitHub CLI instalados para el trabajo posterior.
 
 Windows:
 
 ```powershell
-pwsh -File install.ps1 -DryRun
-pwsh -File install.ps1
+pwsh -File setup\bootstrap-machine.ps1
 ```
 
 WSL/Linux:
 
 ```bash
-./install.sh --dry-run
+./setup/bootstrap-machine.sh
+```
+
+Qué deja preparado:
+
+| Capa | Resultado |
+| --- | --- |
+| Sistema | Git, GitHub CLI, `uv`, Poppler |
+| Python global | Python gestionado por `uv` |
+| CLIs globales aisladas | `pre-commit`, `detect-secrets`, `ruff` |
+| Antigravity | skills y rules de `biblio_skills` visibles para el agente nativo |
+| Proyecto opcional | workflows con `-Project <repo>` o `--project <repo>` |
+
+## Refrescar La Biblioteca
+
+El repositorio es la fuente de verdad. La conexión no crea copias manuales de los
+activos reutilizables; los enlaza o escribe bloques gestionados. Si la máquina ya
+está preparada y solo quieres refrescar rules/skills:
+
+```powershell
+pwsh -File install.ps1
+```
+
+```bash
 ./install.sh
 ```
 
-Qué instala:
+Qué conecta:
 
 | Origen | Destino |
 | --- | --- |

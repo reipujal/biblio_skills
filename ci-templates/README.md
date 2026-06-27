@@ -46,7 +46,7 @@ cp <biblio_skills>/ci-templates/github-actions-ci.yml .github/workflows/ci.yml
 cp <biblio_skills>/ci-templates/check_encoding.py scripts/check_encoding.py
 
 # Instalación de pre-commit y secretos como CLIs globales aisladas:
-# si ya ejecutaste setup/bootstrap-machine.sh, este paso ya está hecho.
+# si ya ejecutaste setup/bootstrap-machine.ps1/.sh, este paso ya está hecho.
 uv tool install pre-commit
 uv tool install detect-secrets
 pre-commit install                      # activa el hook local
