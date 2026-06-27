@@ -5,6 +5,7 @@ Uso: python scripts/check_encoding.py <ficheros...>
 Sale con codigo != 0 si encuentra problemas (apto para pre-commit).
 Derivado de la regla de encoding del protocolo de colaboracion.
 """
+import re
 import sys
 
 USAGE = """Uso:
@@ -16,6 +17,9 @@ Detecta ficheros no UTF-8 o con mojibake frecuente.
 
 # Secuencias de mojibake frecuentes al re-decodificar UTF-8 como latin-1.
 MOJIBAKE = ("Ã±", "Ã³", "Ã©", "Ã­", "Ãº", "Ã¡", "Â¿", "Â¡", "â€")
+
+# Rangos CJK: Han, Hiragana/Katakana, Hangul — no esperados en repo español/inglés.
+_CJK = re.compile(r"[一-鿿぀-ヿ가-힯]")
 
 
 def check(path: str) -> list[str]:
@@ -33,6 +37,8 @@ def check(path: str) -> list[str]:
     for token in MOJIBAKE:
         if token in text:
             problems.append(f"{path}: posible mojibake '{token}' (re-guardar como UTF-8)")
+    if _CJK.search(text):
+        problems.append(f"{path}: carácter CJK/script inesperado (posible artefacto de generación)")
     return problems
 
 
