@@ -13,8 +13,7 @@ abstracciones o automatización anticipada.
 
 **"No hacer nada" es una opción.** Cuando evalúes crear, ampliar o extraer una capacidad,
 comprueba primero si el repo ya cubre el caso con una regla, skill, workflow, plantilla CI o
-memoria. Si está cubierto y no hay hueco real, responde "no" y referencia la fuente existente;
-mínima. Se adversativo con tus propuestas. Ser adversativo no significa buscar una razón para no hacer nada: significa exigir que
+memoria. Si está cubierto y no hay hueco real, responde "no" y referencia la fuente existente. Sé adversativo con tus propuestas. Ser adversativo no significa buscar una razón para no hacer nada: significa exigir que
 cada cambio tenga un beneficio concreto.
 
 **Quitar es mejor que añadir (Borrado Positivo).** Ejerce explícitamente la libertad de proponer la eliminación de código muerto, código comentado (zombie), features obsoletas o abstracciones sin uso demostrable. A menudo, la mejor manera de refactorizar o estabilizar un código problemático heredado no es rodearlo de más lógica protectora, sino proponer su eliminación directa.

@@ -8,7 +8,7 @@ Queda **estrictamente prohibido ahogar errores técnicos**. Existe una tendencia
 
 - Si el código entra en un estado inválido, falta un import, o una dependencia falla, el programa debe **explotar inmediatamente y con ruido** mostrando una traza (stacktrace) clara.
 - Una excepción debe propagarse salvo que tengas una estrategia transaccional concreta para mitigarla (ej: reintentos de red).
-- Un programa que choca ruidosamente es salvable; un programa que captura sus propios崩溃 sin registrarlos, genera silenciosamente datos corruptos en la base de datos.
+- Un programa que choca ruidosamente es salvable; un programa que captura sus propios fallos sin registrarlos, genera silenciosamente datos corruptos en la base de datos.
 
 ## 2. Idempotencia Rigurosa (En Scripts y Manejo de Datos)
 
