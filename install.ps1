@@ -23,6 +23,8 @@ $RulesSrc    = Join-Path $Repo "rules"
 $SkillsDst   = Join-Path $HOME ".gemini\antigravity\skills"     # confirmado por ping-test
 $GeminiMd    = Join-Path $HOME ".gemini\GEMINI.md"
 $AgentsMd    = Join-Path $Repo "AGENTS.md"
+$CommandsSrc = Join-Path $Repo "workflows\commands"
+$CommandsDst = Join-Path $HOME ".claude\commands"
 
 # Bloque GEMINI.md: 1 = referencias @ruta (Antigravity las resuelve); 0 = contenido embebido
 $Reference   = 1
@@ -127,7 +129,23 @@ if ($DryRun) {
 Write-Host "`nHecho."
 Write-Host "Verifica en Antigravity (cierra y reabre): /skills debe listar las de biblio_skills,"
 
-# 3) Workflows -> SOLO por proyecto (no hay global). Requiere -Project <ruta_repo>.
+# 4) Workflows invocables -> ~/.claude/commands/ (slash commands globales de Claude Code)
+Write-Host "`n4) Workflows invocables -> $CommandsDst"
+Act "mkdir $CommandsDst" { New-Item -ItemType Directory -Force -Path $CommandsDst | Out-Null }
+if (Test-Path $CommandsSrc) {
+    Get-ChildItem -File (Join-Path $CommandsSrc "*.md") | ForEach-Object {
+        $dst = Join-Path $CommandsDst $_.Name
+        if (Test-Path $dst) { Act "elimina $($_.Name) previo" { Remove-Item -Force $dst } }
+        Act "hardlink command $($_.Name)" {
+            try   { New-Item -ItemType HardLink -Path $dst -Target $_.FullName | Out-Null }
+            catch { Copy-Item -Path $_.FullName -Destination $dst -Force }
+        }
+    }
+} else {
+    Write-Host "  (workflows\commands\ no existe en el repo - omitido)"
+}
+
+# 5) Workflows -> SOLO por proyecto (no hay global). Requiere -Project <ruta_repo>.
 if ($Project) {
   $wfSrc = Join-Path $Repo "workflows"
   $wfDst = Join-Path $Project ".agents\workflows"
@@ -143,7 +161,7 @@ if ($Project) {
     }
   }
 } else {
-  Write-Host "`n3) Workflows: omitidos (pasa -Project <ruta_repo> para instalar /cierre en .agents\workflows de ese repo)."
+  Write-Host "`n5) Workflows: omitidos (pasa -Project <ruta_repo> para instalar /cierre en .agents\workflows de ese repo)."
 }
 
 Write-Host "y una regla del bloque debe respetarse. Edita en biblio_skills y reejecuta para propagar."
