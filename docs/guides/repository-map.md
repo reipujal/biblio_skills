@@ -62,8 +62,9 @@ Son instaladores de la biblioteca, no de toda la máquina.
 Qué hacen:
 
 - Enlazan `skills/` a la carpeta global de skills de Antigravity.
-- Escriben un bloque gestionado de rules.
-- Instalan workflows por proyecto si reciben una ruta.
+- Escriben un bloque gestionado de rules en `~/.gemini/GEMINI.md` y en `AGENTS.md`.
+- Instalan `workflows/commands/*.md` como slash commands globales en `~/.claude/commands/`.
+- Instalan workflows de proyecto en `<repo>/.agents/workflows/` si reciben una ruta.
 
 Windows:
 
@@ -147,15 +148,24 @@ reutilizable y validada.
 
 ## `workflows/`
 
-Los workflows son comandos explícitos con `/nombre`.
+Los workflows son comandos explícitos con `/nombre`. Se invocan manualmente; no
+se activan por descripción como una skill.
 
-Hoy el principal es:
+Hay dos tipos según su alcance:
+
+**Globales** (`workflows/commands/`): se instalan en `~/.claude/commands/` al
+ejecutar `install.ps1`. Disponibles en cualquier repo sin configuración extra.
 
 ```text
-/cierre
+/brainstorming   conceptualizar una idea antes de diseñar o construir
 ```
 
-Un workflow se invoca manualmente. No se activa por descripción como una skill.
+**De proyecto** (`workflows/*.md`): se instalan en `<repo>/.agents/workflows/`
+con `install.ps1 -Project <ruta>`. Solo disponibles en ese repo.
+
+```text
+/cierre   cierre ordenado de sesión con commit y push
+```
 
 ## Memoria Portable Y `/compact`
 

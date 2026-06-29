@@ -17,7 +17,7 @@ Este repositorio separa cuatro tipos de conocimiento que suelen mezclarse:
 | --- | --- | --- | --- |
 | Regla | Siempre | `rules/` | Criterios universales de trabajo: seguridad, tests, cambio mínimo, dependencias, cierre. |
 | Skill | Cuando la petición encaja con su `description` | `skills/` | Procedimientos reutilizables para familias concretas de tareas. |
-| Workflow | Cuando el usuario invoca `/nombre` | `workflows/` | Rutinas explícitas de sesión o proyecto. |
+| Workflow | Cuando el usuario invoca `/nombre` | `workflows/` | Rutinas explícitas de sesión o proyecto. Los de `workflows/commands/` son globales (Claude Code); los demás se instalan por proyecto. |
 | Plantilla CI | En hooks, commits o PRs | `ci-templates/` | Gates deterministas que una máquina puede comprobar. |
 
 La regla de diseño es simple: **el juicio va en reglas o skills; lo comprobable va
@@ -49,7 +49,9 @@ biblio_skills/
 ├── install.sh                 # conexión WSL/Linux: symlinks y bloque de rules
 ├── rules/                     # reglas universales, siempre activas
 ├── skills/                    # skills reutilizables, cargadas bajo demanda
-├── workflows/                 # workflows invocables; Antigravity no los carga globalmente
+├── workflows/
+│   ├── commands/              # slash commands globales de Claude Code (~/.claude/commands/)
+│   └── *.md                   # workflows de proyecto (se instalan por repo con -Project)
 ├── ci-templates/              # pre-commit, CI y checks copiables por proyecto
 ├── setup/                     # bootstrap global de máquina y plantilla de stack Python
 ├── scripts/                   # mantenimiento del repo, como build_index.py
@@ -122,8 +124,10 @@ Resumen de lo que dejan preparado:
 skills, propagan rules y pueden instalar workflows por proyecto. Para una máquina
 nueva, usa el bootstrap; para refrescar una instalación existente, usa `install.*`.
 
-Los workflows, incluido `/cierre`, no son globales en Antigravity: se instalan en
-cada proyecto. La explicación completa vive en
+Los workflows de `workflows/commands/` (p.ej. `/brainstorming`) se instalan
+globalmente en `~/.claude/commands/` al ejecutar `install.ps1`. Los workflows de
+proyecto (p.ej. `/cierre`) se instalan por repo con `install.ps1 -Project <ruta>`.
+La explicación completa vive en
 [`docs/guides/repository-map.md`](docs/guides/repository-map.md).
 
 ## Reglas De Evolución
